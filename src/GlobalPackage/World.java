@@ -32,4 +32,15 @@ public class World {
 	public int setBlock(int x, int y, int z, int blockType){
 		return matrix[x][y][z] = blockType;
 	}
+
+	public void printInConsole(){
+		for(int i = 0; i < this.xSize(); i+=1){
+			for(int j = 0; j < this.ySize(); j+=1){
+				for(int k = 0; k < this.zSize(); k+=1)
+					System.out.printf(this.getBlock(i, j, k) + " ");
+				System.out.printf("\n");
+			}
+			System.out.printf("\n");
+		}
+	}
 }
