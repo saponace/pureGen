@@ -1,0 +1,8 @@
+share materials. 1 material per block type (grass, water, ...)
+create chuncks
+use GeometryBatchFactory.optimize(chunk), on every chunk (merge geometries withe the same material) 
+
+
+
+
+use quads insted of boxes in order not to draw faces shared by two adjacent cubes (probably lot of work)
