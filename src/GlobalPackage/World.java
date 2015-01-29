@@ -2,10 +2,9 @@ package GlobalPackage;
 
 public class World {
 
-	public final static int GRASS = 0;
-	public final static int WATER = 0;
+	public static enum BlockType {AIR, GRASS, DIRT, STONE, WATER};
 	
-	public static int[][][] matrix;
+	public static BlockType[][][] matrix;
 	
 	public int xSize(){ return matrix.length;}
 	public int ySize(){ return matrix[0].length;} 
@@ -14,23 +13,20 @@ public class World {
 
 
 	public World(int x, int y, int z){
-		matrix = new int[x][y][z];
+		matrix = new BlockType[x][y][z];
 
-       for(int i = 0; i < x; i+=1){
-            for(int j = 0; j < y; j+=1){
-            	for(int k = 0; k < z; k+=1){
-            		System.out.printf(" " + this.setBlock(i, j, k, i));
-            	}
-            }
-        }
+       for(int i = 0; i < x; i+=1)
+            for(int j = 0; j < y; j+=1)
+            	for(int k = 0; k < z; k+=1)
+            		this.setBlock(i, j, k, BlockType.WATER);
 	}
 	
-	public int getBlock(int x, int y, int z){
+	public BlockType getBlock(int x, int y, int z){
 		return matrix[x][y][z];
 	}
 
-	public int setBlock(int x, int y, int z, int blockType){
-		return matrix[x][y][z] = blockType;
+	public void setBlock(int x, int y, int z, BlockType block){
+		matrix[x][y][z] = block;
 	}
 
 	public void printInConsole(){
