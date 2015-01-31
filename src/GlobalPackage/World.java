@@ -3,7 +3,7 @@ package GlobalPackage;
 public class World {
 
 	// Enum of every blocktype
-	public static enum BlockType {AIR, GRASS, DIRT, STONE, WATER};
+	public static enum BlockType {AIR, GRASS, DIRT, STONE, WATER, OUT_OF_BOUNDS};
 	
 	// Matrix containing blocks. Core of the world
 	public static BlockType[][][] matrix;
@@ -39,7 +39,11 @@ public class World {
 	
 	// Get a block on the given coordinates
 	public BlockType getBlock(int x, int y, int z){
-		return matrix[x][y][z];
+		if(x < 0 || x >= this.xSize() ||
+		   y < 0 || y >= this.ySize() ||
+	       z < 0 || z >= this.zSize())
+			return BlockType.OUT_OF_BOUNDS;
+		else return matrix[x][y][z];
 	}
 
 
