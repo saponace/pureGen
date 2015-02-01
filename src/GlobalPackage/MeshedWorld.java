@@ -1,6 +1,5 @@
 package GlobalPackage;
 
-import com.jme3.app.SimpleApplication;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
@@ -9,6 +8,8 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.util.BufferUtils;
+import com.jme3.scene.Node;
+import com.jme3.asset.AssetManager;
 
 public class MeshedWorld {
 
@@ -63,7 +64,8 @@ public class MeshedWorld {
 		return vertices;	
 	}
 
-	public static void createMesh(int x, int y, int z, Orientation orientation, ColorRGBA color) {
+	// Create a quad and attach it to the anchor node
+	public static void createMesh(int x, int y, int z, Orientation orientation, ColorRGBA color, AssetManager assetManager, Node anchor){
 
 		Mesh m = new Mesh();
 
@@ -91,6 +93,6 @@ public class MeshedWorld {
 		geom.setMaterial(mat);
 
 		// Attaching the geometry to the root node.
-		rootNode.attachChild(geom);
+		anchor.attachChild(geom);
 	}
 }
