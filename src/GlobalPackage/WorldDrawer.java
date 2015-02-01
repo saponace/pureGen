@@ -10,15 +10,52 @@ import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.util.BufferUtils;
 import com.jme3.scene.Node;
 import com.jme3.asset.AssetManager;
+import GlobalPackage.World.BlockType;
 
 public class WorldDrawer {
 
 	// Enum of every possible orientation 
 	public static enum Orientation {NORTH, WEST, SOUTH, EAST, UP, DOWN};
 
+	// Determine if we need to draw a quad on a given position on a given orientation
+	private static boolean isQuadNeeded(World world,int x, int y, int z, Orientation orientation){
+		if(world.getBlock(x, y, z) == BlockType.AIR)
+				return false;
+		else{
+			World.BlockType blockNextTo;
+			switch(orientation){
+			case UP:
+				blockNextTo = world.getBlock(x, y+1, z);
+			break;
+			case DOWN:
+				blockNextTo = world.getBlock(x, y-1, z);
+			break;
+			case WEST:
+				blockNextTo = world.getBlock(x-1, y, z);
+			break;
+			case EAST:
+				blockNextTo = world.getBlock(x+1, y, z);
+			break;
+			case NORTH:
+				blockNextTo = world.getBlock(x, y, z-1);
+			break;
+			case SOUTH:
+				blockNextTo = world.getBlock(x, y, z+1);
+			break;
+			default:
+				throw new RuntimeException("Orientation " + orientation + "does not exist");
+			}
+			if(world.getBlock(x, y, z) == BlockType.WATER && blockNextTo == BlockType.WATER)
+				return false;
+			else
+				return (blockNextTo == BlockType.OUT_OF_BOUNDS ||
+                        blockNextTo == BlockType.AIR ||
+                        blockNextTo == BlockType.WATER); 
+		}
+	}
 
 	// Vertex positions in space
-	public static Vector3f[] newVertice(int x, int y, int z, Orientation orientation){
+	private static Vector3f[] newVertice(int x, int y, int z, Orientation orientation){
 		Vector3f[] vertices = new Vector3f[4];
 
 		switch(orientation){
