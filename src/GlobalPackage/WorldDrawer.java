@@ -11,7 +11,7 @@ import com.jme3.util.BufferUtils;
 import com.jme3.scene.Node;
 import com.jme3.asset.AssetManager;
 
-public class MeshedWorld {
+public class WorldDrawer {
 
 	// Enum of every possible orientation 
 	public static enum Orientation {NORTH, WEST, SOUTH, EAST, UP, DOWN};
