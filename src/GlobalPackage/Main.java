@@ -20,11 +20,11 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-		MeshedWorld.createMesh(0, 0, 0, MeshedWorld.Orientation.DOWN, new ColorRGBA(1, 1, 1, 1), assetManager, rootNode);
-		MeshedWorld.createMesh(0, 0, 0, MeshedWorld.Orientation.UP, new ColorRGBA(0, 0, 1, 1), assetManager, rootNode);
-		MeshedWorld.createMesh(0, 0, 0, MeshedWorld.Orientation.SOUTH, new ColorRGBA(0, 1, 1, 1), assetManager, rootNode);
-		MeshedWorld.createMesh(0, 0, 0, MeshedWorld.Orientation.WEST, new ColorRGBA(1, 1, 0, 1), assetManager, rootNode);
-		MeshedWorld.createMesh(0, 0, 0, MeshedWorld.Orientation.EAST, new ColorRGBA(1, 0, 0, 1), assetManager, rootNode);
-		MeshedWorld.createMesh(0, 0, 0, MeshedWorld.Orientation.NORTH, new ColorRGBA(1, 0, 0, 1), assetManager, rootNode);
+		MeshedWorld.drawQuad(0, 0, 0, MeshedWorld.Orientation.DOWN, new ColorRGBA(1, 1, 1, 1), assetManager, rootNode);
+		MeshedWorld.drawQuad(0, 0, 0, MeshedWorld.Orientation.UP, new ColorRGBA(0, 0, 1, 1), assetManager, rootNode);
+		MeshedWorld.drawQuad(0, 0, 0, MeshedWorld.Orientation.SOUTH, new ColorRGBA(0, 1, 1, 1), assetManager, rootNode);
+		MeshedWorld.drawQuad(0, 0, 0, MeshedWorld.Orientation.WEST, new ColorRGBA(1, 1, 0, 1), assetManager, rootNode);
+		MeshedWorld.drawQuad(0, 0, 0, MeshedWorld.Orientation.EAST, new ColorRGBA(1, 0, 0, 1), assetManager, rootNode);
+		MeshedWorld.drawQuad(0, 0, 0, MeshedWorld.Orientation.NORTH, new ColorRGBA(1, 0, 0, 1), assetManager, rootNode);
     }
 }

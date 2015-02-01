@@ -65,7 +65,7 @@ public class MeshedWorld {
 	}
 
 	// Create a quad and attach it to the anchor node
-	public static void createMesh(int x, int y, int z, Orientation orientation, ColorRGBA color, AssetManager assetManager, Node anchor){
+	public static void drawQuad(int x, int y, int z, Orientation orientation, ColorRGBA color, AssetManager assetManager, Node anchor){
 
 		Mesh m = new Mesh();
 
