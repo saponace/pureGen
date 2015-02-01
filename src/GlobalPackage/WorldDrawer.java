@@ -10,6 +10,7 @@ import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.util.BufferUtils;
 import com.jme3.scene.Node;
 import com.jme3.asset.AssetManager;
+
 import GlobalPackage.World.BlockType;
 
 public class WorldDrawer {
@@ -17,42 +18,6 @@ public class WorldDrawer {
 	// Enum of every possible orientation 
 	public static enum Orientation {NORTH, WEST, SOUTH, EAST, UP, DOWN};
 
-	// Determine if we need to draw a quad on a given position on a given orientation
-	private static boolean isQuadNeeded(World world,int x, int y, int z, Orientation orientation){
-		if(world.getBlock(x, y, z) == BlockType.AIR)
-				return false;
-		else{
-			World.BlockType blockNextTo;
-			switch(orientation){
-			case UP:
-				blockNextTo = world.getBlock(x, y+1, z);
-			break;
-			case DOWN:
-				blockNextTo = world.getBlock(x, y-1, z);
-			break;
-			case WEST:
-				blockNextTo = world.getBlock(x-1, y, z);
-			break;
-			case EAST:
-				blockNextTo = world.getBlock(x+1, y, z);
-			break;
-			case NORTH:
-				blockNextTo = world.getBlock(x, y, z-1);
-			break;
-			case SOUTH:
-				blockNextTo = world.getBlock(x, y, z+1);
-			break;
-			default:
-				throw new RuntimeException("Orientation " + orientation + "does not exist");
-			}
-			if(world.getBlock(x, y, z) == BlockType.WATER && blockNextTo == BlockType.WATER)
-				return false;
-			else
-				return (blockNextTo == BlockType.OUT_OF_BOUNDS ||
-                        blockNextTo == BlockType.AIR ||
-                        blockNextTo == BlockType.WATER); 
-		}
-	}
 
 	// Vertex positions in space
 	private static Vector3f[] newVertice(int x, int y, int z, Orientation orientation){
@@ -132,4 +97,92 @@ public class WorldDrawer {
 		// Attaching the geometry to the root node.
 		anchor.attachChild(geom);
 	}
+
+	// Determine if we need to draw a quad on a given position on a given orientation
+	private static boolean isQuadNeeded(World world,int x, int y, int z, Orientation orientation){
+
+		if(world.getBlock(x, y, z) == BlockType.AIR)
+				return false;
+		else{
+			World.BlockType blockNextTo;
+			switch(orientation){
+			case UP:
+				blockNextTo = world.getBlock(x, y+1, z);
+			break;
+			case DOWN:
+				blockNextTo = world.getBlock(x, y-1, z);
+			break;
+			case WEST:
+				blockNextTo = world.getBlock(x-1, y, z);
+			break;
+			case EAST:
+				blockNextTo = world.getBlock(x+1, y, z);
+			break;
+			case NORTH:
+				blockNextTo = world.getBlock(x, y, z-1);
+			break;
+			case SOUTH:
+				blockNextTo = world.getBlock(x, y, z+1);
+			break;
+			default:
+				throw new RuntimeException("Orientation " + orientation + "does not exist");
+			}
+			if(world.getBlock(x, y, z) == BlockType.WATER && blockNextTo == BlockType.WATER)
+				return false;
+			else
+				return (blockNextTo == BlockType.OUT_OF_BOUNDS ||
+                        blockNextTo == BlockType.AIR ||
+                        blockNextTo == BlockType.WATER); 
+		}
+	}
+	
+	// Determine the color of a block given its BlockType
+	private static ColorRGBA colorOf(BlockType btype){
+		ColorRGBA color = new ColorRGBA();
+		double r=1, g=1, b=1, a=1;
+		
+		switch(btype){
+			case AIR:
+				// Never used
+			break;
+			case GRASS:
+				r = 0.175; g = 0.640; b = 0.101; a = 1;
+			break;
+			case DIRT:
+				r = 0.578; g = 0.226; b = 0.096; a = 1;
+			break;
+			case STONE:
+				r = 0.400; g = 0.400; b = 0.400; a = 1;
+			break;
+			case WATER:
+				r = 0; g = 0.246; b = 0.910; a = 0.5;
+			break;
+			case OUT_OF_BOUNDS:
+				// Never used
+			break;
+			default:
+				throw new RuntimeException("BlockType " + btype + "does not exist");
+		}
+		color.set((float)r, (float)g, (float)b, (float)a);
+		return color;
+	}
+	
+	// Draw the world
+	public static void drawWorld(World world, AssetManager assetManager, Node anchor){
+		int maxx = world.xSize();
+		int maxy = world.ySize();
+		int maxz = world.zSize();
+
+		for(int x = 0; x < maxx; x++)
+			for(int y = maxy-1; y >= 0; y--)
+				for(int z = 0; z < maxz; z++){
+					for(Orientation orientation : Orientation.values())
+						if(isQuadNeeded(world, x, y, z, orientation))
+							drawQuad(x, y-10, z-5, orientation, colorOf(world.getBlock(x, y, z)), assetManager, anchor);
+				}
+	}
+	
+	
+	
+	
 }
