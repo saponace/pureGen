@@ -10,7 +10,7 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.util.BufferUtils;
 
-public class MeshedWorld extends {
+public class MeshedWorld {
 
 	// Enum of every possible orientation 
 	public static enum Orientation {NORTH, WEST, SOUTH, EAST, UP, DOWN};
