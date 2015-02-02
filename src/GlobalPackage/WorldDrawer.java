@@ -11,6 +11,10 @@ import com.jme3.util.BufferUtils;
 import com.jme3.scene.Node;
 import com.jme3.asset.AssetManager;
 
+import com.jme3.material.RenderState.BlendMode;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
+
+
 import GlobalPackage.World.BlockType;
 
 public class WorldDrawer {
@@ -67,7 +71,7 @@ public class WorldDrawer {
 	}
 
 	// Create a quad and attach it to the anchor node
-	public static void drawQuad(int x, int y, int z, Orientation orientation, ColorRGBA color, AssetManager assetManager, Node anchor){
+	public static void drawQuad(int x, int y, int z, Orientation orientation, BlockType btype, AssetManager assetManager, Node anchor){
 
 		Mesh m = new Mesh();
 
@@ -91,8 +95,14 @@ public class WorldDrawer {
 		Geometry geom = new Geometry("OurMesh", m);
 		Material mat = new Material(assetManager,
 				"Common/MatDefs/Misc/Unshaded.j3md");
-		mat.setColor("Color", color);
+		mat.setColor("Color", colorOf(btype));
 		geom.setMaterial(mat);
+		
+		// Use transparency if water
+		if(btype == BlockType.WATER){
+			mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
+			geom.setQueueBucket(Bucket.Transparent); 
+		}
 
 		// Attaching the geometry to the root node.
 		anchor.attachChild(geom);
@@ -178,11 +188,7 @@ public class WorldDrawer {
 				for(int z = 0; z < maxz; z++){
 					for(Orientation orientation : Orientation.values())
 						if(isQuadNeeded(world, x, y, z, orientation))
-							drawQuad(x, y-10, z-5, orientation, colorOf(world.getBlock(x, y, z)), assetManager, anchor);
+							drawQuad(x, y-10, z-5, orientation, world.getBlock(x, y, z), assetManager, anchor);
 				}
 	}
-	
-	
-	
-	
 }

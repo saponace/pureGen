@@ -25,12 +25,14 @@ public class World {
 		for(int i = 0; i < x; i++)
 			for(int j = 0; j < y; j++)
 				for(int k = 0; k < z; k++){
-					if(j<6)
+					if(j<2)
 						this.setBlock(i, j, k, BlockType.STONE);
-					else if(j<9)
-						this.setBlock(i, j, k, BlockType.DIRT);
-					else
+					else if(j<3)
+						this.setBlock(i, j, k, BlockType.WATER);
+					else if(j<4)
 						this.setBlock(i, j, k, BlockType.GRASS);
+					else
+						this.setBlock(i, j, k, BlockType.WATER);
 
 				}
 	}
