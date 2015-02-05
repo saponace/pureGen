@@ -11,20 +11,20 @@ import com.jme3.input.KeyInput;
 
 
 
-public class Main extends SimpleApplication {
+import com.jme3.math.ColorRGBA;
 
+
+public class Main extends SimpleApplication {
 	public static void main(String[] args){
 		Main app = new Main();
 		app.start();
 	}
 
 
-
-
 	@Override
 	public void simpleInitApp() {
-
-		World world = new World(30, 6, 30);
+		viewPort.setBackgroundColor(new ColorRGBA(0f, 0.5f, 1f, 0f));
+		World world = new World(200, 6, 200);
 		WorldDrawer.drawWorld(world, assetManager, rootNode);
 
 		GeometryBatchFactory.optimize(rootNode);

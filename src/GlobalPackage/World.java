@@ -25,16 +25,22 @@ public class World {
 		for(int i = 0; i < x; i++)
 			for(int j = 0; j < y; j++)
 				for(int k = 0; k < z; k++){
-					if(j<2)
+					if(j<3)
 						this.setBlock(i, j, k, BlockType.STONE);
-					else if(j<3)
-						this.setBlock(i, j, k, BlockType.WATER);
-					else if(j<4)
+					else if(j<5)
+						this.setBlock(i, j, k, BlockType.DIRT);
+					else if(j<7)
 						this.setBlock(i, j, k, BlockType.GRASS);
 					else
 						this.setBlock(i, j, k, BlockType.WATER);
-
 				}
+		this.setBlock(5, 5, 5, BlockType.WATER);
+		this.setBlock(5, 5, 6, BlockType.WATER);
+		this.setBlock(6, 5, 5, BlockType.WATER);
+		this.setBlock(6, 5, 6, BlockType.WATER);
+		this.setBlock(5, 5, 7, BlockType.WATER);
+		this.setBlock(6, 5, 7, BlockType.WATER);
+		this.setBlock(5, 4, 5, BlockType.WATER);
 	}
 	
 	
