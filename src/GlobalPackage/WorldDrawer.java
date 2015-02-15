@@ -1,5 +1,7 @@
 package GlobalPackage;
 
+import com.jme3.light.AmbientLight;
+import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
@@ -9,13 +11,19 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer.Type;
 import com.jme3.util.BufferUtils;
 import com.jme3.scene.Node;
+import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.asset.AssetManager;
-
 import com.jme3.material.RenderState.BlendMode;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.ssao.SSAOFilter;
 import com.jme3.renderer.queue.RenderQueue.Bucket;
-
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.renderer.ViewPort;
 
 import GlobalPackage.World.BlockType;
+
+
+
 
 public class WorldDrawer {
 
@@ -70,11 +78,46 @@ public class WorldDrawer {
 		return vertices;	
 	}
 
+	// Give the normal of a Quad given its orientation
+	private static float[] getNormal(Orientation orientation){
+			float[] normal = new float[3];
+		switch(orientation){
+		case NORTH:
+			normal = new float[] {0, 0, -1};
+			break;
+		case WEST:
+			normal = new float[] {-1, 0, 0};
+			break;
+		case SOUTH:
+			normal = new float[] {0, 0, 1};
+			break;
+		case EAST:
+			normal = new float[] {1, 0, 0};
+			break;
+		case UP:
+			normal = new float[] {0, 1, 0};
+			break;
+		case DOWN:
+			normal = new float[] {0, -1, 0};
+			break;
+		default:
+			throw new RuntimeException("Orientation " + orientation + "does not exist");
+		}
+		float[] normalX3 = new float[12];
+		System.arraycopy(normal, 0, normalX3, 0, 3);
+		System.arraycopy(normal, 0, normalX3, 3, 3);
+		System.arraycopy(normal, 0, normalX3, 6, 3);
+		System.arraycopy(normal, 0, normalX3, 9, 3);
+		return normalX3;	
+	}
+	
 	// Create a quad and attach it to the anchor node
-	public static void drawQuad(int x, int y, int z, Orientation orientation, BlockType btype, AssetManager assetManager, Node anchor){
+	private static void drawQuad(int x, int y, int z, Orientation orientation, BlockType btype, AssetManager assetManager, Node anchor){
 
-		Mesh m = new Mesh();
+		Mesh mesh = new Mesh();
 
+		
+		
 		// Texture coordinates
 		Vector2f[] texCoord = new Vector2f[4];
 		texCoord[0] = new Vector2f(0, 0);
@@ -83,25 +126,32 @@ public class WorldDrawer {
 		texCoord[3] = new Vector2f(1, 1);
 
 		// Indexes. Order in which mesh should be constructed
-		int[] indexes = { 2, 0, 1, 1, 3, 2 };
+		int[] indexes = {2,0,1, 1,3,2};
 
 		// Setting buffers
-		m.setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(newVertice(x, y, z, orientation)));
-		m.setBuffer(Type.TexCoord, 2, BufferUtils.createFloatBuffer(texCoord));
-		m.setBuffer(Type.Index, 1, BufferUtils.createIntBuffer(indexes));
-		m.updateBound();
+		mesh.setBuffer(Type.Position, 3, BufferUtils.createFloatBuffer(newVertice(x, y, z, orientation)));
+		mesh.setBuffer(Type.Index, 1, BufferUtils.createIntBuffer(indexes));
+		mesh.setBuffer(Type.Normal, 3, BufferUtils.createFloatBuffer(getNormal(orientation)));	
+		mesh.updateBound();
 
 		// Creating a geometry, and apply the color to it 
-		Geometry geom = new Geometry("OurMesh", m);
-		Material mat = new Material(assetManager,
-				"Common/MatDefs/Misc/Unshaded.j3md");
-		mat.setColor("Color", colorOf(btype));
+		Geometry geom = new Geometry("", mesh);
+		Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+		
+	    mat.setBoolean("UseMaterialColors",true); 
+		mat.setColor("Ambient", colorOf(btype));
+	    mat.setColor("Diffuse", colorOf(btype));  // minimum material color
+	    mat.setColor("Specular", ColorRGBA.White); // for shininess
+	    mat.setFloat("Shininess", 1f); // [1,128] for shininess
+		
+		
 		geom.setMaterial(mat);
 		
 		// Use transparency if water
 		if(btype == BlockType.WATER){
 			mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
 			geom.setQueueBucket(Bucket.Transparent); 
+			mat.setFloat("Shininess", 30f); // [1,128] for shininess
 		}
 
 		// Attaching the geometry to the root node.
@@ -177,8 +227,44 @@ public class WorldDrawer {
 		return color;
 	}
 	
+	// Set the light sources and the shadows 
+	private static void setLight(AssetManager assetManager, Node anchor, ViewPort viewPort){
+
+		anchor.setShadowMode(ShadowMode.CastAndReceive);		
+
+        // Ambient light
+		AmbientLight al = new AmbientLight();
+		al.setColor(ColorRGBA.White.mult(0.5f));
+		anchor.addLight(al);
+ 
+        // Directionnal light
+		DirectionalLight sun = new DirectionalLight();
+		sun.setColor(ColorRGBA.White);
+		sun.setDirection(new Vector3f(-1,-1,-1));
+		anchor.addLight(sun);		
+
+
+        // Directionnal light shadows
+        final int SHADOWMAP_SIZE=2048;
+        DirectionalLightShadowRenderer dlsr;
+        dlsr = new DirectionalLightShadowRenderer(assetManager, SHADOWMAP_SIZE, 3);
+        dlsr.setLight(sun);
+        dlsr.setShadowIntensity(0.6f);
+        viewPort.addProcessor(dlsr);
+
+		// Ambient Occlusion
+        FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
+		SSAOFilter ssaoFilter = new SSAOFilter(0.5f, 1f, 1f, 0.1f);
+		fpp.addFilter(ssaoFilter);
+		viewPort.addProcessor(fpp);		
+	}
+	
+	
 	// Draw the world
-	public static void drawWorld(World world, AssetManager assetManager, Node anchor){
+	public static void drawWorld(World world, AssetManager assetManager, Node anchor, ViewPort viewPort){
+		
+	setLight(assetManager, anchor, viewPort);
+		
 		int maxx = world.xSize();
 		int maxy = world.ySize();
 		int maxz = world.zSize();

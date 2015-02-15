@@ -1,17 +1,29 @@
 package GlobalPackage;
 
-
+// SimpleApplication 
 import com.jme3.app.SimpleApplication;
 
+
+// Rendering optimization
 import jme3tools.optimize.GeometryBatchFactory;
 
+
+// Camera motion
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.KeyInput;
-
-
-
-
+// Colors, used by background
 import com.jme3.math.ColorRGBA;
+
+
+
+//import com.jme3.math.Vector3f;
+//import com.jme3.light.DirectionalLight;
+//import com.jme3.light.AmbientLight;
+//import com.jme3.post.FilterPostProcessor;
+//import com.jme3.post.ssao.SSAOFilter;
+//import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+//import com.jme3.shadow.DirectionalLightShadowFilter;
+//import com.jme3.shadow.DirectionalLightShadowRenderer;
 
 
 public class Main extends SimpleApplication {
@@ -23,10 +35,15 @@ public class Main extends SimpleApplication {
 
 	@Override
 	public void simpleInitApp() {
-		viewPort.setBackgroundColor(new ColorRGBA(0f, 0.5f, 1f, 0f));
-		World world = new World(200, 6, 200);
-		WorldDrawer.drawWorld(world, assetManager, rootNode);
+		// World generation
+		World world = new World(30, 10, 30);
+		
 
+		// World drawing
+		WorldDrawer.drawWorld(world, assetManager, rootNode, viewPort);
+		// Background color 
+		viewPort.setBackgroundColor(new ColorRGBA(0f, 0.5f, 1f, 0f));
+		// Rendering optimizations
 		GeometryBatchFactory.optimize(rootNode);
 	}
 
