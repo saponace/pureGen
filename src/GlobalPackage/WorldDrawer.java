@@ -254,7 +254,7 @@ public class WorldDrawer {
 
 		// Ambient Occlusion
         FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
-		SSAOFilter ssaoFilter = new SSAOFilter(0.5f, 1f, 1f, 0.1f);
+		SSAOFilter ssaoFilter = new SSAOFilter(0.5f, 2f, 1f, 0.1f);
 		fpp.addFilter(ssaoFilter);
 		viewPort.addProcessor(fpp);		
 	}
