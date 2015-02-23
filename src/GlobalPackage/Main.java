@@ -4,10 +4,6 @@ package GlobalPackage;
 import com.jme3.app.SimpleApplication;
 
 
-// Rendering optimization
-import jme3tools.optimize.GeometryBatchFactory;
-
-
 // Camera motion
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.KeyInput;
@@ -38,15 +34,14 @@ public class Main extends SimpleApplication {
 	@Override
 	public void simpleInitApp() {
 		// World generation
-		World world = new World(30, 10, 30);
+		World world = new World(200, 30, 200);
 		
 
 		// World drawing
 		WorldDrawer.drawWorld(world, assetManager, rootNode, viewPort);
 		// Background color 
 		viewPort.setBackgroundColor(new ColorRGBA(0f, 0.5f, 1f, 0f));
-		// Rendering optimizations
-		GeometryBatchFactory.optimize(rootNode);
+
 		
 	}
 

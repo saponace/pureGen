@@ -1,7 +1,16 @@
 package GlobalPackage;
 
+
+
+
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.ssao.SSAOFilter;
+import com.jme3.renderer.queue.RenderQueue.Bucket;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.renderer.ViewPort;
+
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector2f;
@@ -14,11 +23,7 @@ import com.jme3.scene.Node;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.RenderState.BlendMode;
-import com.jme3.post.FilterPostProcessor;
-import com.jme3.post.ssao.SSAOFilter;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
-import com.jme3.renderer.queue.RenderQueue.ShadowMode;
-import com.jme3.renderer.ViewPort;
+
 
 import GlobalPackage.World.BlockType;
 
@@ -260,6 +265,10 @@ public class WorldDrawer {
 	}
 	
 	
+	
+
+	
+	
 	// Draw the world
 	public static void drawWorld(World world, AssetManager assetManager, Node anchor, ViewPort viewPort){
 		
@@ -268,13 +277,19 @@ public class WorldDrawer {
 		int maxx = world.xSize();
 		int maxy = world.ySize();
 		int maxz = world.zSize();
+		// Cunks structure containing every chunk
+		Chunks chunks = new Chunks(world);
 
-		for(int x = 0; x < maxx; x++)
-			for(int y = maxy-1; y >= 0; y--)
-				for(int z = 0; z < maxz; z++){
+		for(int i = 0; i < maxx; i++)
+			for(int j = maxy-1; j >= 0; j--)
+				for(int k = 0; k < maxz; k++){
 					for(Orientation orientation : Orientation.values())
-						if(isQuadNeeded(world, x, y, z, orientation))
-							drawQuad(x, y-10, z-5, orientation, world.getBlock(x, y, z), assetManager, anchor);
+						if(isQuadNeeded(world, i, j, k, orientation))
+							drawQuad(i, j-10, k-5, orientation, world.getBlock(i, j, k), assetManager, chunks.getChunk(i, k));
 				}
+		Chunks.attachEveryChunkToRootNode(world, anchor);
+
+
+			
 	}
 }
