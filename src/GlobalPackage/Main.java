@@ -16,14 +16,16 @@ import com.jme3.math.ColorRGBA;
 
 
 
+//import com.jme3.scene.Node;
+//import com.jme3.math.Plane;
+//import com.jme3.math.FastMath;
+//import com.jme3.math.Quaternion;
+//import com.jme3.scene.Geometry;
+//import com.jme3.scene.shape.Quad;
+//import com.jme3.water.SimpleWaterProcessor;
 //import com.jme3.math.Vector3f;
-//import com.jme3.light.DirectionalLight;
-//import com.jme3.light.AmbientLight;
-//import com.jme3.post.FilterPostProcessor;
-//import com.jme3.post.ssao.SSAOFilter;
+//import com.jme3.math.Vector2f;
 //import com.jme3.renderer.queue.RenderQueue.ShadowMode;
-//import com.jme3.shadow.DirectionalLightShadowFilter;
-//import com.jme3.shadow.DirectionalLightShadowRenderer;
 
 
 public class Main extends SimpleApplication {
@@ -45,6 +47,7 @@ public class Main extends SimpleApplication {
 		viewPort.setBackgroundColor(new ColorRGBA(0f, 0.5f, 1f, 0f));
 		// Rendering optimizations
 		GeometryBatchFactory.optimize(rootNode);
+		
 	}
 
 
