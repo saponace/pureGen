@@ -60,7 +60,7 @@ public class World {
 					height = (int)(Math.random()*ymax);
 				heightArray[i][k] = height;
 			}
-		smoothenSurface(heightArray, 10, 3);
+		smoothenSurface(heightArray, 10, 20);
 		return heightArray;
 	}
 
@@ -103,7 +103,8 @@ public class World {
 
 
 	// Display letters representing the world in the debug console
-	public void printInConsole(){
+	@Override public String toString() {
+		StringBuilder result = new StringBuilder();
 		for(int i = 0; i < this.xSize(); i++){
 			for(int j = this.ySize()-1 ; j >= 0; j--){
 				for(int k = 0; k < this.zSize(); k++){
@@ -128,11 +129,12 @@ public class World {
 					default:
 						charToPrint = 'X';
 					}
-					System.out.printf(charToPrint + " ");
+					result.append(charToPrint + " ");
 				}
-				System.out.printf("\n");
+				result.append("\n");
 			}
-			System.out.printf("\n");
+			result.append("\n");
 		}
+		return result.toString();
 	}
 }
