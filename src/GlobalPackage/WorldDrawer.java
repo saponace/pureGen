@@ -85,7 +85,7 @@ public class WorldDrawer {
 
 	// Give the normal of a Quad given its orientation
 	private static float[] getNormal(Orientation orientation){
-			float[] normal = new float[3];
+		float[] normal = new float[3];
 		switch(orientation){
 		case NORTH:
 			normal = new float[] {0, 0, -1};
@@ -115,14 +115,14 @@ public class WorldDrawer {
 		System.arraycopy(normal, 0, normalX3, 9, 3);
 		return normalX3;	
 	}
-	
+
 	// Create a quad and attach it to the anchor node
 	private static void drawQuad(int x, int y, int z, Orientation orientation, BlockType btype, AssetManager assetManager, Node anchor){
 
 		Mesh mesh = new Mesh();
 
-		
-		
+
+
 		// Texture coordinates
 		Vector2f[] texCoord = new Vector2f[4];
 		texCoord[0] = new Vector2f(0, 0);
@@ -142,16 +142,16 @@ public class WorldDrawer {
 		// Creating a geometry, and apply the color to it 
 		Geometry geom = new Geometry("", mesh);
 		Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
-		
-	    mat.setBoolean("UseMaterialColors",true); 
+
+		mat.setBoolean("UseMaterialColors",true); 
 		mat.setColor("Ambient", colorOf(btype));
-	    mat.setColor("Diffuse", colorOf(btype));  // minimum material color
-	    mat.setColor("Specular", ColorRGBA.White); // for shininess
-	    mat.setFloat("Shininess", 1f); // [1,128] for shininess
-		
-		
+		mat.setColor("Diffuse", colorOf(btype));  // minimum material color
+		mat.setColor("Specular", ColorRGBA.White); // for shininess
+		mat.setFloat("Shininess", 1f); // [1,128] for shininess
+
+
 		geom.setMaterial(mat);
-		
+
 		// Use transparency if water
 		if(btype == BlockType.WATER){
 			mat.getAdditionalRenderState().setBlendMode(BlendMode.Alpha);
@@ -167,28 +167,28 @@ public class WorldDrawer {
 	private static boolean isQuadNeeded(World world,int x, int y, int z, Orientation orientation){
 
 		if(world.getBlock(x, y, z) == BlockType.AIR)
-				return false;
+			return false;
 		else{
 			World.BlockType blockNextTo;
 			switch(orientation){
 			case UP:
 				blockNextTo = world.getBlock(x, y+1, z);
-			break;
+				break;
 			case DOWN:
 				blockNextTo = world.getBlock(x, y-1, z);
-			break;
+				break;
 			case WEST:
 				blockNextTo = world.getBlock(x-1, y, z);
-			break;
+				break;
 			case EAST:
 				blockNextTo = world.getBlock(x+1, y, z);
-			break;
+				break;
 			case NORTH:
 				blockNextTo = world.getBlock(x, y, z-1);
-			break;
+				break;
 			case SOUTH:
 				blockNextTo = world.getBlock(x, y, z+1);
-			break;
+				break;
 			default:
 				throw new RuntimeException("Orientation " + orientation + "does not exist");
 			}
@@ -196,84 +196,84 @@ public class WorldDrawer {
 				return false;
 			else
 				return (blockNextTo == BlockType.OUT_OF_BOUNDS ||
-                        blockNextTo == BlockType.AIR ||
-                        blockNextTo == BlockType.WATER); 
+				blockNextTo == BlockType.AIR ||
+				blockNextTo == BlockType.WATER); 
 		}
 	}
-	
+
 	// Determine the color of a block given its BlockType
 	private static ColorRGBA colorOf(BlockType btype){
 		ColorRGBA color = new ColorRGBA();
 		double r=1, g=1, b=1, a=1;
-		
+
 		switch(btype){
-			case AIR:
-				// Never used
+		case AIR:
+			// Never used
 			break;
-			case GRASS:
-				r = 0.175; g = 0.640; b = 0.101; a = 1;
+		case GRASS:
+			r = 0.175; g = 0.640; b = 0.101; a = 1;
 			break;
-			case DIRT:
-				r = 0.578; g = 0.226; b = 0.096; a = 1;
+		case DIRT:
+			r = 0.578; g = 0.226; b = 0.096; a = 1;
 			break;
-			case STONE:
-				r = 0.400; g = 0.400; b = 0.400; a = 1;
+		case STONE:
+			r = 0.400; g = 0.400; b = 0.400; a = 1;
 			break;
-			case WATER:
-				r = 0; g = 0.246; b = 0.910; a = 0.5;
+		case WATER:
+			r = 0; g = 0.246; b = 0.910; a = 0.5;
 			break;
-			case OUT_OF_BOUNDS:
-				// Never used
+		case OUT_OF_BOUNDS:
+			// Never used
 			break;
-			default:
-				throw new RuntimeException("BlockType " + btype + "does not exist");
+		default:
+			throw new RuntimeException("BlockType " + btype + "does not exist");
 		}
 		color.set((float)r, (float)g, (float)b, (float)a);
 		return color;
 	}
-	
+
 	// Set the light sources and the shadows 
 	private static void setLight(AssetManager assetManager, Node anchor, ViewPort viewPort){
 
 		anchor.setShadowMode(ShadowMode.CastAndReceive);		
 
-        // Ambient light
+		// Ambient light
 		AmbientLight al = new AmbientLight();
 		al.setColor(ColorRGBA.White.mult(0.5f));
 		anchor.addLight(al);
- 
-        // Directionnal light
+
+		// Directionnal light
 		DirectionalLight sun = new DirectionalLight();
 		sun.setColor(ColorRGBA.White);
 		sun.setDirection(new Vector3f(-1,-1,-1));
 		anchor.addLight(sun);		
 
 
-        // Directionnal light shadows
-        final int SHADOWMAP_SIZE=2048;
-        DirectionalLightShadowRenderer dlsr;
-        dlsr = new DirectionalLightShadowRenderer(assetManager, SHADOWMAP_SIZE, 3);
-        dlsr.setLight(sun);
-        dlsr.setShadowIntensity(0.6f);
-        viewPort.addProcessor(dlsr);
+		// Directionnal light shadows
+		final int SHADOWMAP_SIZE=2048;
+		DirectionalLightShadowRenderer dlsr;
+		dlsr = new DirectionalLightShadowRenderer(assetManager, SHADOWMAP_SIZE, 3);
+		dlsr.setLight(sun);
+		dlsr.setShadowIntensity(0.6f);
+		viewPort.addProcessor(dlsr);
 
 		// Ambient Occlusion
-        FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
+		FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
 		SSAOFilter ssaoFilter = new SSAOFilter(0.5f, 2f, 1f, 0.1f);
 		fpp.addFilter(ssaoFilter);
 		viewPort.addProcessor(fpp);		
 	}
-	
-	
-	
 
-	
-	
+
+
+
+	static int count;	
+
 	// Draw the world
 	public static void drawWorld(World world, AssetManager assetManager, Node anchor, ViewPort viewPort){
-		
-	setLight(assetManager, anchor, viewPort);
-		
+
+		setLight(assetManager, anchor, viewPort);
+
 		int maxx = world.xSize();
 		int maxy = world.ySize();
 		int maxz = world.zSize();
@@ -288,8 +288,7 @@ public class WorldDrawer {
 							drawQuad(i, j-10, k-5, orientation, world.getBlock(i, j, k), assetManager, chunks.getChunk(i, k));
 				}
 		Chunks.attachEveryChunkToRootNode(world, anchor);
-
-
-			
+		// Background color 
+		viewPort.setBackgroundColor(new ColorRGBA(0f, 0.5f, 1f, 0f));
 	}
 }

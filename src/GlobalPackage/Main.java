@@ -34,13 +34,12 @@ public class Main extends SimpleApplication {
 	@Override
 	public void simpleInitApp() {
 		// World generation
-		World world = new World(200, 30, 200);
+		World world = new World(256, 30, 256);
 		
 
 		// World drawing
 		WorldDrawer.drawWorld(world, assetManager, rootNode, viewPort);
-		// Background color 
-		viewPort.setBackgroundColor(new ColorRGBA(0f, 0.5f, 1f, 0f));
+
 
 		
 	}
