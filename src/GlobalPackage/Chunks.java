@@ -32,6 +32,7 @@ public class Chunks {
 				Couple chunkPos = new Couple(i, k);
 				Node node = new Node("node");
 				chunksHashMap.put(chunkPos, node); 
+				System.out.printf("chunk %s created\n", chunkPos.toString());
 			}
 	}
 
@@ -74,8 +75,8 @@ public class Chunks {
 		int z = world.xSize();
 		int x = world.zSize();
 		Couple nbOfChunks = getChunkPosOf(x, z);
-		for(int i=0; i <= nbOfChunks.i(); i++)
-			for(int k=0; k <= nbOfChunks.k(); k++){
+		for(int i=0; i < nbOfChunks.i(); i++)
+			for(int k=0; k < nbOfChunks.k(); k++){
 				Couple chunkPos = new Couple(i, k);
 				Node chunk = chunksHashMap.get(chunkPos);
 				attachChunk(chunk, anchor);
