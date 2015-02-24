@@ -245,14 +245,13 @@ public class WorldDrawer {
 		// Directionnal light
 		DirectionalLight sun = new DirectionalLight();
 		sun.setColor(ColorRGBA.White);
-		sun.setDirection(new Vector3f(-1,-1,-1));
+		sun.setDirection(new Vector3f(-0.5f,-2,-1));
 		anchor.addLight(sun);		
 
 
 		// Directionnal light shadows
-		final int SHADOWMAP_SIZE=2048;
 		DirectionalLightShadowRenderer dlsr;
-		dlsr = new DirectionalLightShadowRenderer(assetManager, SHADOWMAP_SIZE, 3);
+		dlsr = new DirectionalLightShadowRenderer(assetManager, 1024, 3);
 		dlsr.setLight(sun);
 		dlsr.setShadowIntensity(0.6f);
 		viewPort.addProcessor(dlsr);
