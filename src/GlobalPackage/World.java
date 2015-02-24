@@ -20,59 +20,17 @@ public class World {
 
 
 
-	// Smoothen the heightArray (lower height differences between close locations)
-	private int[][] smoothenSurface(int[][] heightArray, int radius, int iterations){
-		int maxx = heightArray.length;
-		int maxz = heightArray[0].length;
-		for(int count = 0; count < iterations; count++)
-			for(int i= 0; i < maxx; i++)
-				for(int k= 0; k < maxz; k++){
-					int coef = 0;
-					for(int di=radius*-1; di<radius; di++)
-						for(int dk=radius*-1; dk<radius; dk++){
-							if(i+di > 0 && i+di < maxx && k+dk > 0 && k+dk < maxz){
-								if(heightArray[i][k] < heightArray[i+di][k+dk])
-									coef++;
-								else if(heightArray[i][k] > heightArray[i+di][k+dk])
-									coef--;
-							}
-						}
-					if(coef > 0)
-						heightArray[i][k]++;
-					else if(coef < 0)
-						heightArray[i][k]--;
-				}
-		return heightArray;
-
-	}
-
-
-
-	// Create the array giving the height of the surface of the world
-	private int[][] createHeightArray(int xmin, int xmax, int ymin, int ymax, int zmin, int zmax){
-		int[][] heightArray = new int[xmax-xmin][zmax-zmin];
-
-		// Première passe, complètement random
-		for(int i=xmin; i < xmax; i++)
-			for(int k=zmin; k < zmax; k++){
-				int height = 0;
-				while(height < ymin)
-					height = (int)(Math.random()*ymax);
-				heightArray[i][k] = height;
-			}
-		smoothenSurface(heightArray, 10, 20);
-		return heightArray;
-	}
-
 
 	// Test constructor
 	public World(int x, int y, int z){
 		matrix = new BlockType[x][y][z];
-		int[][] heightArray = createHeightArray(0, x, 1, y, 0, z); 
+		// heightMap -> height of the surface of the world
+		HeightMap heightMap = new HeightMap(x, 10, y, z);
+
 		for(int i = 0; i < x; i++)
 			for(int k = 0; k < z; k++){
 				for(int j = 0; j < y; j++){
-					if(j < heightArray[i][k]){
+					if(j < heightMap.getHeight(i, k)){
 						this.setBlock(i, j, k, BlockType.GRASS);
 						//						System.out.printf("%d, %d\n", j, height);
 					}
