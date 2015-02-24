@@ -7,8 +7,6 @@ import com.jme3.app.SimpleApplication;
 // Camera motion
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.KeyInput;
-// Colors, used by background
-import com.jme3.math.ColorRGBA;
 
 
 
@@ -36,12 +34,8 @@ public class Main extends SimpleApplication {
 		// World generation
 		World world = new World(256, 30, 256);
 		
-
 		// World drawing
 		WorldDrawer.drawWorld(world, assetManager, rootNode, viewPort);
-
-
-		
 	}
 
 

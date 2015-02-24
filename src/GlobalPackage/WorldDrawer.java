@@ -287,6 +287,7 @@ public class WorldDrawer {
 						if(isQuadNeeded(world, i, j, k, orientation))
 							drawQuad(i, j-10, k-5, orientation, world.getBlock(i, j, k), assetManager, chunks.getChunk(i, k));
 				}
+
 		Chunks.attachEveryChunkToRootNode(world, anchor);
 		// Background color 
 		viewPort.setBackgroundColor(new ColorRGBA(0f, 0.5f, 1f, 0f));
