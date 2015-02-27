@@ -32,7 +32,6 @@ public class Chunks {
 				Couple chunkPos = new Couple(i, k);
 				Node node = new Node("node");
 				chunksHashMap.put(chunkPos, node); 
-				System.out.printf("chunk %s created\n", chunkPos.toString());
 			}
 	}
 
@@ -82,7 +81,7 @@ public class Chunks {
 				attachChunk(chunk, anchor);
 				// Rendering optimizations
 				GeometryBatchFactory.optimize(chunk);
-				System.out.printf("chunk %s displayed\n", chunkPos.toString());
+				System.out.printf("chunk %s computed\n", chunkPos.toString());
 			}
 	}
 }
