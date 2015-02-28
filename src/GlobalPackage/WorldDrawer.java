@@ -289,7 +289,8 @@ public class WorldDrawer {
 				}
 
 		Chunks.attachEveryChunkToRootNode(world, anchor);
-		// Background color 
-//		viewPort.setBackgroundColor(new ColorRGBA(0f, 0.5f, 1f, 0f));
+
+		Sky sky = new Sky(anchor, assetManager);
+		sky.draw();
 	}
 }
