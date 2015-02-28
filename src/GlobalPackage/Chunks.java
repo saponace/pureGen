@@ -16,7 +16,7 @@ public class Chunks {
 	// Hashmap containing chunks
 	private static HashMap<Couple, Node> chunksHashMap = new HashMap<Couple, Node>();
 	// Chunk size
-	private static int chunkSize = 32;
+	private static int chunkSize = 16;
 
 
 
