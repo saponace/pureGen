@@ -1,15 +1,18 @@
 package GlobalPackage;
 
-
-
+// Hashmaps
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Iterator;
+
+// Chunks are nodes
 import com.jme3.scene.Node;
 
 // Rendering optimization
 import jme3tools.optimize.GeometryBatchFactory;
 
-
-
+// Cam location (choosing which chunks to display)
+import com.jme3.math.Vector3f;
 
 public class Chunks {
 
@@ -17,72 +20,109 @@ public class Chunks {
 	private static HashMap<Couple, Node> chunksHashMap = new HashMap<Couple, Node>();
 	// Chunk size
 	private static int chunkSize = 16;
-
-
-
+	// Render distance (in chunks)
+	private static int renderDistance = 10;
+	// Does the algorithm check every chunk at every simpleUpdate loop to detach
+	// them ? Useful when teleporting (for instance
+	private static boolean aggressiveChunkUnloading = false;
+	// Do we attach every chunk to the rotNode at startup ?
+	private static boolean loadEveryChunkAtStartup = false;
 
 	// Constructor -- needs a world (to get his dimensions)
-	public Chunks(World world){
+	public Chunks(World world) {
 		int z = world.xSize();
 		int x = world.zSize();
-		Couple nbOfChunks = getChunkPosOf(x-1, z-1);
+		Couple nbOfChunks = getChunkPosOf(x - 1, z - 1);
 
-		for(int i=0; i <= nbOfChunks.i(); i++)
-			for(int k=0; k <= nbOfChunks.k(); k++){
+		for (int i = 0; i <= nbOfChunks.i(); i++)
+			for (int k = 0; k <= nbOfChunks.k(); k++) {
 				Couple chunkPos = new Couple(i, k);
 				Node node = new Node("node");
-				chunksHashMap.put(chunkPos, node); 
+				chunksHashMap.put(chunkPos, node);
 			}
 	}
 
-
-	// Get a couple representating the position of the chunk in which the block is
-	private static Couple getChunkPosOf(int i, int k){
-		int iNbChunk = i/chunkSize;
-		int kNbChunk = k/chunkSize;
+	// Get a couple representating the position of the chunk in which the block
+	// is
+	private static Couple getChunkPosOf(int i, int k) {
+		int iNbChunk = i / chunkSize;
+		int kNbChunk = k / chunkSize;
 		Couple chunkPos = new Couple(iNbChunk, kNbChunk);
 		return chunkPos;
 
 	}
 
 	// Get a chunk and create one if does not exist
-	public Node getChunk(int i, int k){
+	public Node getChunk(int i, int k) {
 		Couple chunkPos = getChunkPosOf(i, k);
-		if(chunksHashMap.containsKey(chunkPos)){
-			Node node = chunksHashMap.get(chunkPos); 
+		if (chunksHashMap.containsKey(chunkPos)) {
+			Node node = chunksHashMap.get(chunkPos);
 			return node;
-		}
-		else 
-			throw new RuntimeException("Chunk " + chunkPos.toString() + "does not exist");
+		} else
+			throw new RuntimeException("Chunk " + chunkPos.toString()
+					+ "does not exist");
 
 	}
 
 	// Attach a chunk (of type Node) to an anchor
-	private static void attachChunk(Node chunk, Node anchor){
+	private static void attachChunk(Node chunk, Node anchor) {
 		anchor.attachChild(chunk);
 	}
 
 	// Detach a chunk (of type Node) of an anchor
-	//	static private void detachChunk(Node chunk, Node anchor){
-	//		anchor.detachChild(chunk);
-	//	}
-
-
+	private static void detachChunk(Node chunk, Node anchor) {
+		anchor.detachChild(chunk);
+	}
 
 	// attach every chunk to the rootNode
-	public static void attachEveryChunkToRootNode(World world, Node anchor){
+	public static void loadEveryChunk(World world, Node anchor) {
 		int z = world.xSize();
 		int x = world.zSize();
 		Couple nbOfChunks = getChunkPosOf(x, z);
-		for(int i=0; i < nbOfChunks.i(); i++)
-			for(int k=0; k < nbOfChunks.k(); k++){
+		for (int i = 0; i < nbOfChunks.i(); i++)
+			for (int k = 0; k < nbOfChunks.k(); k++) {
 				Couple chunkPos = new Couple(i, k);
 				Node chunk = chunksHashMap.get(chunkPos);
-				attachChunk(chunk, anchor);
+				if (loadEveryChunkAtStartup)
+					attachChunk(chunk, anchor);
+
 				// Rendering optimizations
 				GeometryBatchFactory.optimize(chunk);
 
-				if(Main.debug) System.out.printf("chunk %s filled\n", chunkPos.toString());
+				if (Main.debug)
+					System.out.printf("chunk %s filled\n", chunkPos.toString());
+			}
+	}
+
+	// Only display close chunks
+	public static void displayCloseChunks(Vector3f camLocation, Node anchor) {
+		Couple camChunkPos = getChunkPosOf((int) camLocation.x,
+				(int) camLocation.z);
+		int diameterToCheckToDetach = 4;
+		if (aggressiveChunkUnloading) {
+			Iterator<Map.Entry<Couple, Node>> it = chunksHashMap.entrySet()
+					.iterator();
+			while (it.hasNext()) {
+				Map.Entry<Couple, Node> chunk = (Map.Entry<Couple, Node>) it
+						.next();
+				detachChunk((Node) chunk.getValue(), anchor);
+			}
+		}
+
+		for (int i = -renderDistance - diameterToCheckToDetach; i < renderDistance
+				+ diameterToCheckToDetach; i++)
+			for (int k = -renderDistance - diameterToCheckToDetach; k < renderDistance
+					+ diameterToCheckToDetach; k++) {
+				Couple currentChunkPos = new Couple(i + camChunkPos.i(), k
+						+ camChunkPos.k());
+				Node currentChunk = chunksHashMap.get(currentChunkPos);
+				if (currentChunk != null)
+					if (i < -renderDistance || i > renderDistance
+							|| k < -renderDistance || k > renderDistance)
+						detachChunk(currentChunk, anchor);
+					else
+						attachChunk(currentChunk, anchor);
+
 			}
 	}
 }
