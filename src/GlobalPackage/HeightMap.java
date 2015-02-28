@@ -13,6 +13,11 @@ public class HeightMap {
 	// Get the height of the surface on the given coordinates
 	public int getHeight(int i, int k) {
 		return heightArray[i][k];
+	}	
+	
+	// Set the height of the surface on the given coordinates
+	private void setHeight(int i, int k, int height) {
+		heightArray[i][k] = height;
 	}
 
 	// Create the array giving the height of the surface of the world
@@ -28,7 +33,7 @@ public class HeightMap {
 		computeHeight(60, 0);
 
 		perlin();
-		 smoothenSurface(2, 10);
+		smoothenSurface(2, 10);
 	}
 
 	// Build the gradients (which is an array that gives the gradients of
@@ -58,10 +63,12 @@ public class HeightMap {
 			for (int countk = 0; countk <= 1; countk++) {
 				int gradX = gradientsX + counti;
 				int gradZ = gradientsZ + countk;
-				double dist = frequency - planDistance(i, k, gradX * frequency, gradZ * frequency);
+				double dist = frequency
+						- planDistance(i, k, gradX * frequency, gradZ
+								* frequency);
 				height += yMin + dist * gradients[gradX][gradZ];
 			}
-		if(height > yMax)
+		if (height > yMax)
 			height = yMax;
 		return height;
 
@@ -71,7 +78,7 @@ public class HeightMap {
 		for (int i = 0; i < xSize; i++)
 			for (int k = 0; k < zSize; k++) {
 				int height = computeHeight(i, k);
-					heightArray[i][k] = height;
+				setHeight(i, k, height);
 			}
 
 	}
@@ -87,18 +94,17 @@ public class HeightMap {
 						for (int dk = radius * -1; dk < radius; dk++) {
 							if (i + di > 0 && i + di < xSize && k + dk > 0
 									&& k + dk < zSize) {
-								if (heightArray[i][k] < heightArray[i + di][k
-										+ dk])
+								if (getHeight(i, k) < getHeight(i+di, k+dk))
 									coef++;
-								else if (heightArray[i][k] > heightArray[i + di][k
-										+ dk])
+								else if (getHeight(i, k) > getHeight(i+di, k+dk))
 									coef--;
 							}
 						}
+					int formerHeight = getHeight(i, k);
 					if (coef > 0)
-						heightArray[i][k]++;
+						setHeight(i, k, formerHeight + 1);
 					else if (coef < 0)
-						heightArray[i][k]--;
+						setHeight(i, k, formerHeight - 1);
 				}
 	}
 }

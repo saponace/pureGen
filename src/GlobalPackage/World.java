@@ -8,18 +8,8 @@ public class World {
 	// Matrix containing blocks. Core of the world
 	public static BlockType[][][] matrix;
 
-	// Width of the world
-	public int xSize(){ return matrix.length;}
-
-	// Length of the world
-	public int ySize(){ return matrix[0].length;} 
-
-	// Height of the world
-	public int zSize(){ return matrix[0][1].length;} 
-
-
-
-
+	
+	
 
 	// Test constructor
 	public World(int x, int y, int z){
@@ -47,7 +37,14 @@ public class World {
 			}
 	}
 
+	// Width of the world
+	public int xSize(){ return matrix.length;}
 
+	// Length of the world
+	public int ySize(){ return matrix[0].length;} 
+
+	// Height of the world
+	public int zSize(){ return matrix[0][1].length;} 
 
 	// Get a block on the given coordinates
 	public BlockType getBlock(int x, int y, int z){
