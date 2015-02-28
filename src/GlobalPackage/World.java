@@ -31,11 +31,16 @@ public class World {
 			for(int k = 0; k < z; k++){
 				for(int j = 0; j < y; j++){
 					int height = heightMap.getHeight(i, k);
-					if(j == height - 1){
+					int dirtThickness = (int)(Math.random()*4);
+					if(j == height - 1)
 						this.setBlock(i, j, k, BlockType.GRASS);
-					}
-					else if(j < height - 1)
+
+					else if(j < height - 1 && j > height - 1 - dirtThickness)
 						this.setBlock(i, j, k, BlockType.DIRT);
+
+					else if(j < height - 1 - dirtThickness)
+						this.setBlock(i, j, k, BlockType.STONE);
+
 					else 
 						this.setBlock(i, j, k, BlockType.AIR);
 				}
