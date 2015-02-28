@@ -25,6 +25,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.material.RenderState.BlendMode;
 
 
+
 import GlobalPackage.World.BlockType;
 
 
@@ -214,7 +215,7 @@ public class WorldDrawer {
 			r = 0.175; g = 0.640; b = 0.101; a = 1;
 			break;
 		case DIRT:
-			r = 0.578; g = 0.226; b = 0.096; a = 1;
+			r = 0.398; g = 0.195; b = 0.000; a = 1;
 			break;
 		case STONE:
 			r = 0.400; g = 0.400; b = 0.400; a = 1;
@@ -251,7 +252,7 @@ public class WorldDrawer {
 
 		// Directionnal light shadows
 		DirectionalLightShadowRenderer dlsr;
-		dlsr = new DirectionalLightShadowRenderer(assetManager, 1024, 3);
+		dlsr = new DirectionalLightShadowRenderer(assetManager, 2048, 1);
 		dlsr.setLight(sun);
 		dlsr.setShadowIntensity(0.6f);
 		viewPort.addProcessor(dlsr);
@@ -289,6 +290,6 @@ public class WorldDrawer {
 
 		Chunks.attachEveryChunkToRootNode(world, anchor);
 		// Background color 
-		viewPort.setBackgroundColor(new ColorRGBA(0f, 0.5f, 1f, 0f));
+//		viewPort.setBackgroundColor(new ColorRGBA(0f, 0.5f, 1f, 0f));
 	}
 }
