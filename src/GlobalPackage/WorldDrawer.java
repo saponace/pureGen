@@ -280,6 +280,7 @@ public class WorldDrawer {
 		// Cunks structure containing every chunk
 		Chunks chunks = new Chunks(world);
 
+		if(Main.debug) System.out.println("Blocks being computed ...");
 		for(int i = 0; i < maxx; i++)
 			for(int j = maxy-1; j >= 0; j--)
 				for(int k = 0; k < maxz; k++){
@@ -287,7 +288,6 @@ public class WorldDrawer {
 						if(isQuadNeeded(world, i, j, k, orientation))
 							drawQuad(i, j-10, k-5, orientation, world.getBlock(i, j, k), assetManager, chunks.getChunk(i, k));
 				}
-
 		Chunks.attachEveryChunkToRootNode(world, anchor);
 
 		Sky sky = new Sky(anchor, assetManager);

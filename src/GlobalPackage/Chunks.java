@@ -81,7 +81,8 @@ public class Chunks {
 				attachChunk(chunk, anchor);
 				// Rendering optimizations
 				GeometryBatchFactory.optimize(chunk);
-				System.out.printf("chunk %s computed\n", chunkPos.toString());
+
+				if(Main.debug) System.out.printf("chunk %s filled\n", chunkPos.toString());
 			}
 	}
 }

@@ -28,7 +28,7 @@ public class HeightMap {
 		computeHeight(60, 0);
 
 		perlin();
-//		 smoothenSurface(2, 10);
+		 smoothenSurface(2, 10);
 	}
 
 	// Build the gradients (which is an array that gives the gradients of
@@ -39,8 +39,6 @@ public class HeightMap {
 		for (int i = 0; i < gradients.length; i++)
 			for (int k = 0; k < gradients[0].length; k++)
 				gradients[i][k] = Math.random();
-		System.out.printf("gradients: %dx%d\n", gradients.length,
-				gradients[0].length);
 	}
 
 	// Gives the distance between two dots on a plan
@@ -65,7 +63,6 @@ public class HeightMap {
 			}
 		if(height > yMax)
 			height = yMax;
-		System.out.printf("i: %d, k: %d, height: %d\n", i, k, height);
 		return height;
 
 	}

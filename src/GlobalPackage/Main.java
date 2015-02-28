@@ -3,6 +3,8 @@ package GlobalPackage;
 // SimpleApplication 
 import com.jme3.app.SimpleApplication;
 
+// Window settings
+import com.jme3.system.AppSettings;
 
 // Camera motion
 import com.jme3.input.controls.KeyTrigger;
@@ -11,34 +13,101 @@ import com.jme3.math.Vector3f;
 
 
 
-//import com.jme3.scene.Node;
-//import com.jme3.math.Plane;
-//import com.jme3.math.FastMath;
-//import com.jme3.math.Quaternion;
-//import com.jme3.scene.Geometry;
-//import com.jme3.scene.shape.Quad;
-//import com.jme3.water.SimpleWaterProcessor;
-//import com.jme3.math.Vector3f;
-//import com.jme3.math.Vector2f;
-//import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+import com.jme3.math.Plane;
+import com.jme3.math.FastMath;
+import com.jme3.math.Quaternion;
+import com.jme3.scene.Geometry;
+import com.jme3.scene.shape.Quad;
+import com.jme3.water.SimpleWaterProcessor;
+import com.jme3.math.Vector2f;
+import com.jme3.renderer.queue.RenderQueue.ShadowMode;
+
+
+
+
+
+
 
 
 public class Main extends SimpleApplication {
+
+	
+	static boolean debug;
+	
 	public static void main(String[] args){
 		Main app = new Main();
+
+		debug = true;
+		
+		app.setShowSettings(false);
+		AppSettings settings = new AppSettings(true);
+		settings.put("Width", 1000);
+		settings.put("Height", 600);
+		settings.put("Title", "3DGen");
+		settings.put("VSync", true);
+		//Anti-Aliasing
+		settings.put("Samples", 4);
+		app.setSettings(settings);
 		app.start();
+
 	}
 
+	
+
+	
+	
+	
+	
 
 	@Override
 	public void simpleInitApp() {
 		// World generation
-		World world = new World(128, 30, 128);
+		World world = new World(64, 64, 64);
+		if(debug) System.out.println("World generated");
 		
-		// World drawing
+        // World drawing
 		WorldDrawer.drawWorld(world, assetManager, rootNode, viewPort);
-		cam.setLocation(new Vector3f(0, 50, 0));
-		cam.lookAtDirection(new Vector3f(1, -0.4f, 1), Vector3f.UNIT_Y);
+		if(debug) System.out.println("World Displayed");
+		
+		
+		
+		
+		
+		
+		
+		// we create a water processor
+		SimpleWaterProcessor waterProcessor = new SimpleWaterProcessor(assetManager);
+		waterProcessor.setReflectionScene(rootNode);
+		 
+		// we set the water plane
+		Vector3f waterLocation=new Vector3f(0,40,0);
+		waterProcessor.setPlane(new Plane(Vector3f.UNIT_Y, waterLocation.dot(Vector3f.UNIT_Y)));
+		viewPort.addProcessor(waterProcessor);
+		 
+		// we set wave properties
+		waterProcessor.setWaterDepth(40);         // transparency of water
+		waterProcessor.setDistortionScale(0.05f); // strength of waves
+		waterProcessor.setWaveSpeed(0.05f);       // speed of waves
+		 
+		// we define the wave size by setting the size of the texture coordinates
+		Quad quad = new Quad(400,400);
+		quad.scaleTextureCoordinates(new Vector2f(6f,6f));
+		 
+		// we create the water geometry from the quad
+		Geometry water=new Geometry("water", quad);
+		water.setLocalRotation(new Quaternion().fromAngleAxis(-FastMath.HALF_PI, Vector3f.UNIT_X));
+		water.setLocalTranslation(-200, -6, 250);
+		water.setShadowMode(ShadowMode.Receive);
+		water.setMaterial(waterProcessor.getMaterial());
+		rootNode.attachChild(water);	
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 
 
@@ -63,7 +132,11 @@ public class Main extends SimpleApplication {
 			inputManager.addMapping("FLYCAM_Rise", new KeyTrigger(KeyInput.KEY_SPACE));
 			inputManager.addMapping("FLYCAM_Lower", new KeyTrigger(KeyInput.KEY_LSHIFT));
 			inputManager.addListener(flyCam, new String[] {"FLYCAM_Forward", "FLYCAM_Backward", "FLYCAM_StrafeLeft", "FLYCAM_StrafeRight", "FLYCAM_Rise", "FLYCAM_Lower"});
-			flyCam.setMoveSpeed(20);	
+			flyCam.setMoveSpeed(100);	
+			flyCam.setRotationSpeed(2);
+			cam.setLocation(new Vector3f(0, 50, 0));
+			cam.lookAtDirection(new Vector3f(1, -0.4f, 1), Vector3f.UNIT_Y);
+
 			firstLoopOfSimpleUpdate = false;
 		}
 	}
