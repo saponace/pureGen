@@ -25,15 +25,17 @@ public class World {
 	public World(int x, int y, int z){
 		matrix = new BlockType[x][y][z];
 		// heightMap -> height of the surface of the world
-		HeightMap heightMap = new HeightMap(x, 10, y, z);
+		HeightMap heightMap = new HeightMap(0, x, 1, y, 0, z);
 
 		for(int i = 0; i < x; i++)
 			for(int k = 0; k < z; k++){
 				for(int j = 0; j < y; j++){
-					if(j < heightMap.getHeight(i, k)){
+					int height = heightMap.getHeight(i, k);
+					if(j == height - 1){
 						this.setBlock(i, j, k, BlockType.GRASS);
-						//						System.out.printf("%d, %d\n", j, height);
 					}
+					else if(j < height - 1)
+						this.setBlock(i, j, k, BlockType.DIRT);
 					else 
 						this.setBlock(i, j, k, BlockType.AIR);
 				}
