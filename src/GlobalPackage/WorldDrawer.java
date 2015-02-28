@@ -286,7 +286,7 @@ public class WorldDrawer {
 				for(int k = 0; k < maxz; k++){
 					for(Orientation orientation : Orientation.values())
 						if(isQuadNeeded(world, i, j, k, orientation))
-							drawQuad(i, j-10, k-5, orientation, world.getBlock(i, j, k), assetManager, chunks.getChunk(i, k));
+							drawQuad(i, j, k, orientation, world.getBlock(i, j, k), assetManager, chunks.getChunk(i, k));
 				}
 		Chunks.attachEveryChunkToRootNode(world, anchor);
 
