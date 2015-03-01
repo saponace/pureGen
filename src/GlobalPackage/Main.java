@@ -10,6 +10,7 @@ import com.jme3.system.AppSettings;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.KeyInput;
 import com.jme3.math.Vector3f;
+import com.jme3.input.controls.AnalogListener;
 
 
 
@@ -63,7 +64,7 @@ public class Main extends SimpleApplication {
 	@Override
 	public void simpleInitApp() {
 		// World generation
-		World world = new World(128, 64, 128);
+		World world = new World(64, 64, 64);
 		if(debug) System.out.println("World generated");
 		
         // World drawing
@@ -109,8 +110,27 @@ public class Main extends SimpleApplication {
 
 
 	
-	
-	
+	private AnalogListener analogListener = new AnalogListener() {
+	    public void onAnalog(String name, float value, float tpf) {
+	        if (name.equals("FLYCAM_Forward") || name.equals("FLYCAM_Backward")) {
+	    	Vector3f currentCamLocation = cam.getLocation();
+	    	Vector3f camDirection = cam.getDirection();
+	    	Vector3f speedArray = camDirection.add(cam.getUp());
+	    	Vector3f projectedSpArray = speedArray.project(Vector3f.UNIT_X);
+	    	projectedSpArray.addLocal(speedArray.project(Vector3f.UNIT_Z));
+	    	double prSpArNorm = Math.sqrt(Math.pow(projectedSpArray.getX(), 2) +
+	    			Math.pow(projectedSpArray.getZ(), 2));
+	    	projectedSpArray.multLocal((float)prSpArNorm);
+
+	    	if (name.equals("FLYCAM_Backward")) 
+	    		projectedSpArray.multLocal(-1);
+	    	
+	    	Vector3f newCamLocation = currentCamLocation.add(projectedSpArray);
+	    	cam.setLocation(new Vector3f(newCamLocation));
+	        }
+	    }
+	};	
+
 	// Used to remap flycam controls
 	boolean firstLoopOfSimpleUpdate = true;
 	@Override
@@ -129,7 +149,11 @@ public class Main extends SimpleApplication {
 			inputManager.addMapping("FLYCAM_StrafeRight", new KeyTrigger(KeyInput.KEY_D));
 			inputManager.addMapping("FLYCAM_Rise", new KeyTrigger(KeyInput.KEY_SPACE));
 			inputManager.addMapping("FLYCAM_Lower", new KeyTrigger(KeyInput.KEY_LSHIFT));
-			inputManager.addListener(flyCam, new String[] {"FLYCAM_Forward", "FLYCAM_Backward", "FLYCAM_StrafeLeft", "FLYCAM_StrafeRight", "FLYCAM_Rise", "FLYCAM_Lower"});
+			inputManager.addListener(flyCam, new String[] {"FLYCAM_StrafeLeft", "FLYCAM_StrafeRight", "FLYCAM_Rise", "FLYCAM_Lower"});
+			
+			 inputManager.addListener(analogListener,"FLYCAM_Forward", "FLYCAM_Backward");
+			 
+			
 			// Move speed
 			flyCam.setMoveSpeed(100);	
 			flyCam.setRotationSpeed(2);
@@ -141,7 +165,10 @@ public class Main extends SimpleApplication {
 
 			firstLoopOfSimpleUpdate = false;
 		}
-//		System.out.println(cam.getLocation());
+		
+//		System.out.println(cam.getDirection().toString());
+		
 		Chunks.displayCloseChunks(cam.getLocation(), rootNode);
+//		Chunks.displayChunksInFrustum(cam.getLocation());
 	}
 }
