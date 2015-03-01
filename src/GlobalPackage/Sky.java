@@ -33,7 +33,7 @@ public class Sky {
 	public Sky(Node anchor, AssetManager assetManager){
 		this.assetManager = assetManager;
 		this.anchor = anchor;
-		this.skyDistance = 500;
+		this.skyDistance = 5000;
 	}
 	
 	// Set colors for the corners of the vertexes
@@ -60,37 +60,38 @@ public class Sky {
 	private Vector3f[] newVertice(int x, int y, int z, Orientation position){
 		Vector3f[] vertices = new Vector3f[4];
 		int sd = skyDistance;
+		int downSkyh = -10;
 
 		switch(position){
 		case SOUTH:
-			vertices[0] = new Vector3f(sd, -sd, sd);
-			vertices[1] = new Vector3f(-sd, -sd, sd);
+			vertices[0] = new Vector3f(sd, downSkyh, sd);
+			vertices[1] = new Vector3f(-sd, downSkyh, sd);
 			vertices[2] = new Vector3f(sd, sd, sd);
 			vertices[3] = new Vector3f(-sd, sd, sd);
 			break;
 		case EAST:
-			vertices[0] = new Vector3f(sd, -sd, -sd);
-			vertices[1] = new Vector3f(sd, -sd, sd);
+			vertices[0] = new Vector3f(sd, downSkyh, -sd);
+			vertices[1] = new Vector3f(sd, downSkyh, sd);
 			vertices[2] = new Vector3f(sd, sd, -sd);
 			vertices[3] = new Vector3f(sd, sd, sd);
 			break;
 		case NORTH:
-			vertices[0] = new Vector3f(-sd, -sd, -sd);
-			vertices[1] = new Vector3f(sd, -sd, -sd);
+			vertices[0] = new Vector3f(-sd, downSkyh, -sd);
+			vertices[1] = new Vector3f(sd, downSkyh, -sd);
 			vertices[2] = new Vector3f(-sd, sd, -sd);
 			vertices[3] = new Vector3f(sd, sd, -sd);
 			break;
 		case WEST:
-			vertices[0] = new Vector3f(-sd, -sd, sd);
-			vertices[1] = new Vector3f(-sd, -sd, -sd);
+			vertices[0] = new Vector3f(-sd, downSkyh, sd);
+			vertices[1] = new Vector3f(-sd, downSkyh, -sd);
 			vertices[2] = new Vector3f(-sd, sd, sd);
 			vertices[3] = new Vector3f(-sd, sd, -sd);
 			break;
 		case DOWN:
-			vertices[0] = new Vector3f(-sd, -sd, sd);
-			vertices[1] = new Vector3f(sd, -sd, sd);
-			vertices[2] = new Vector3f(-sd, -sd, -sd);
-			vertices[3] = new Vector3f(sd, -sd, -sd);
+			vertices[0] = new Vector3f(-sd, downSkyh, sd);
+			vertices[1] = new Vector3f(sd, downSkyh, sd);
+			vertices[2] = new Vector3f(-sd, downSkyh, -sd);
+			vertices[3] = new Vector3f(sd, downSkyh, -sd);
 			break;
 		case UP:
 			vertices[0] = new Vector3f(-sd, sd, -sd);
@@ -176,6 +177,7 @@ public class Sky {
 		sky.attachChild(createNorthQuad(ColorRGBA.Cyan, ColorRGBA.White));
 		sky.attachChild(createWestQuad(ColorRGBA.Cyan, ColorRGBA.White));
 		sky.attachChild(createEastQuad(ColorRGBA.Cyan, ColorRGBA.White));
+
 		sky.setShadowMode(ShadowMode.Off);		
 		anchor.attachChild(sky);
 	}
