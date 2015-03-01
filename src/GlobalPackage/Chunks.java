@@ -30,12 +30,15 @@ public class Chunks {
 
 	// Constructor -- needs a world (to get his dimensions)
 	public Chunks(World world) {
-		int z = world.xSize();
-		int x = world.zSize();
-		Couple nbOfChunks = getChunkPosOf(x - 1, z - 1);
+		int xmin = world.xMin();
+		int zmin = world.zMin();
+		int xmax = world.xMax();
+		int zmax = world.zMax();
+		Couple maxChunks = getChunkPosOf(xmax - 1, zmax - 1);
+		Couple minChunks = getChunkPosOf(xmin, zmin);
 
-		for (int i = 0; i <= nbOfChunks.i(); i++)
-			for (int k = 0; k <= nbOfChunks.k(); k++) {
+		for (int i = minChunks.i(); i <= maxChunks.i(); i++)
+			for (int k = minChunks.k(); k <= maxChunks.k(); k++) {
 				Couple chunkPos = new Couple(i, k);
 				Node node = new Node("node");
 				chunksHashMap.put(chunkPos, node);
@@ -76,11 +79,14 @@ public class Chunks {
 
 	// attach every chunk to the rootNode
 	public static void loadEveryChunk(World world, Node anchor) {
-		int z = world.xSize();
-		int x = world.zSize();
-		Couple nbOfChunks = getChunkPosOf(x, z);
-		for (int i = 0; i < nbOfChunks.i(); i++)
-			for (int k = 0; k < nbOfChunks.k(); k++) {
+		int xmin = world.xMin();
+		int zmin = world.zMin();
+		int xmax = world.xMax();
+		int zmax = world.zMax();
+		Couple minChunks = getChunkPosOf(xmin, zmin);
+		Couple maxChunks = getChunkPosOf(xmax, zmax);
+		for (int i = minChunks.i(); i < maxChunks.i(); i++)
+			for (int k = minChunks.k(); k < maxChunks.k(); k++) {
 				Couple chunkPos = new Couple(i, k);
 				Node chunk = chunksHashMap.get(chunkPos);
 				if (loadEveryChunkAtStartup)
