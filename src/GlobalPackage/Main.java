@@ -110,6 +110,7 @@ public class Main extends SimpleApplication {
 			setFlycam();
 			firstLoopOfSimpleUpdate = false;
 		}
+		guiInfos.printflyCamLocation(cam.getLocation(), guiFont);
 		Chunks.displayCloseChunks(cam.getLocation(), rootNode);
 		// Chunks.displayChunksInFrustum(cam.getLocation());
 	}
