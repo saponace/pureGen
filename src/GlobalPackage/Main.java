@@ -60,38 +60,38 @@ public class Main extends SimpleApplication {
 		
 		
 		
-		// we create a water processor
-		SimpleWaterProcessor waterProcessor = new SimpleWaterProcessor(
-				assetManager);
-		waterProcessor.setReflectionScene(rootNode);
-
-		int waterX = -200;
-		int waterY = 0;
-		int waterZ = 250;
-
-		// we set the water plane
-		Vector3f waterLocation = new Vector3f(waterX, waterY, waterZ);
-		waterProcessor.setPlane(new Plane(Vector3f.UNIT_Y, waterLocation
-				.dot(Vector3f.UNIT_Y)));
-		viewPort.addProcessor(waterProcessor);
-
-		// we set wave properties
-		waterProcessor.setWaterDepth(40); // transparency of water
-		waterProcessor.setDistortionScale(0.05f); // strength of waves
-		waterProcessor.setWaveSpeed(0.02f); // speed of waves
-
-		// we define the wave size by setting the size of the texture
-		// coordinates
-		Quad quad = new Quad(400, 400);
-		quad.scaleTextureCoordinates(new Vector2f(6f, 6f));
-
-		// we create the water geometry from the quad
-		Geometry water = new Geometry("water", quad);
-		water.setLocalRotation(new Quaternion().fromAngleAxis(
-				-FastMath.HALF_PI, Vector3f.UNIT_X));
-		water.setLocalTranslation(waterX, waterY, waterZ);
-		water.setShadowMode(ShadowMode.Receive);
-		water.setMaterial(waterProcessor.getMaterial());
+//		// we create a water processor
+//		SimpleWaterProcessor waterProcessor = new SimpleWaterProcessor(
+//				assetManager);
+//		waterProcessor.setReflectionScene(rootNode);
+//
+//		int waterX = -200;
+//		int waterY = 0;
+//		int waterZ = 250;
+//
+//		// we set the water plane
+//		Vector3f waterLocation = new Vector3f(waterX, waterY, waterZ);
+//		waterProcessor.setPlane(new Plane(Vector3f.UNIT_Y, waterLocation
+//				.dot(Vector3f.UNIT_Y)));
+//		viewPort.addProcessor(waterProcessor);
+//
+//		// we set wave properties
+//		waterProcessor.setWaterDepth(40); // transparency of water
+//		waterProcessor.setDistortionScale(0.05f); // strength of waves
+//		waterProcessor.setWaveSpeed(0.02f); // speed of waves
+//
+//		// we define the wave size by setting the size of the texture
+//		// coordinates
+//		Quad quad = new Quad(400, 400);
+//		quad.scaleTextureCoordinates(new Vector2f(6f, 6f));
+//
+//		// we create the water geometry from the quad
+//		Geometry water = new Geometry("water", quad);
+//		water.setLocalRotation(new Quaternion().fromAngleAxis(
+//				-FastMath.HALF_PI, Vector3f.UNIT_X));
+//		water.setLocalTranslation(waterX, waterY, waterZ);
+//		water.setShadowMode(ShadowMode.Receive);
+//		water.setMaterial(waterProcessor.getMaterial());
 		// rootNode.attachChild(water);
 	}
 
@@ -112,7 +112,8 @@ public class Main extends SimpleApplication {
 		}
 		guiInfos.printflyCamLocation(cam.getLocation(), guiFont);
 		Chunks.displayCloseChunks(cam.getLocation(), rootNode);
-		// Chunks.displayChunksInFrustum(cam.getLocation());
+//		 Chunks.displayChunksInFrustum(cam.getLocation());
+		System.out.println(cam.getFrustumBottom());
 	}
 
 	// Application settings (window size, vsync ...
@@ -183,8 +184,6 @@ public class Main extends SimpleApplication {
 		}
 	};
 	
-	// FlyCam forward & backward
-
 	// Flycam moving forward ad backward
 	private AnalogListener analogListener = new AnalogListener() {
 		public void onAnalog(String name, float value, float tpf) {

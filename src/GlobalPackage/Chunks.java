@@ -21,13 +21,15 @@ public class Chunks {
 	// Chunk size
 	private static int chunkSize = 16;
 	// Render distance (in chunks)
-	private static int renderDistance = 10;
+	private static int renderDistance = 30;
 	// Does the algorithm check every chunk at every simpleUpdate loop to detach
 	// them ? Useful when teleporting (for instance
 	private static boolean aggressiveChunkUnloading = false;
 	// Do we attach every chunk to the rotNode at startup ?
 	private static boolean loadEveryChunkAtStartup = false;
 
+	
+	
 	// Constructor -- needs a world (to get his dimensions)
 	public Chunks(World world) {
 		int xmin = world.xMin();
@@ -128,7 +130,11 @@ public class Chunks {
 						detachChunk(currentChunk, anchor);
 					else
 						attachChunk(currentChunk, anchor);
-
 			}
 	}
+		// Only display chunks in the cam frustum (angle de vue)
+		public static void displayChunksInFrustum(Vector3f camLocation){
+			
+		}
+
 }

@@ -274,7 +274,7 @@ public class WorldDrawer {
 
 		// Directionnal light shadows
 		DirectionalLightShadowRenderer dlsr;
-		dlsr = new DirectionalLightShadowRenderer(assetManager, 2048, 1);
+		dlsr = new DirectionalLightShadowRenderer(assetManager, 2048, 4);
 		dlsr.setLight(sun);
 		dlsr.setShadowIntensity(0.6f);
 		viewPort.addProcessor(dlsr);
