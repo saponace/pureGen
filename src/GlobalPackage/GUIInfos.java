@@ -9,7 +9,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.scene.Node;
 // Vector3f
 import com.jme3.math.Vector3f;
-import com.jogamp.newt.Screen;
+//import com.jogamp.newt.Screen;
 
 public class GUIInfos {
 
