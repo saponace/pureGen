@@ -28,8 +28,6 @@ public class Chunks {
 	// Do we attach every chunk to the rotNode at startup ?
 	private static boolean loadEveryChunkAtStartup = false;
 
-	
-	
 	// Constructor -- needs a world (to get his dimensions)
 	public Chunks(World world) {
 		int xmin = world.xMin();
@@ -97,8 +95,7 @@ public class Chunks {
 				// Rendering optimizations
 				GeometryBatchFactory.optimize(chunk);
 
-				if (Main.debug)
-					System.out.printf("chunk %s filled\n", chunkPos.toString());
+				Main.printDebug("chunk " + chunkPos.toString() + " filled");
 			}
 	}
 
@@ -132,9 +129,10 @@ public class Chunks {
 						attachChunk(currentChunk, anchor);
 			}
 	}
-		// Only display chunks in the cam frustum (angle de vue)
-		public static void displayChunksInFrustum(Vector3f camLocation){
-			
-		}
+
+	// Only display chunks in the cam frustum (angle de vue)
+	public static void displayChunksInFrustum(Vector3f camLocation) {
+
+	}
 
 }

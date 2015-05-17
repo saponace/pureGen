@@ -5,7 +5,6 @@ import com.jme3.app.SimpleApplication;
 // Window settings
 import com.jme3.system.AppSettings;
 
-
 // Hyperspeed
 import com.jme3.input.controls.ActionListener;
 
@@ -30,7 +29,7 @@ public class Main extends SimpleApplication {
 	// If set to true, details about the generation will be printed in the
 	// console
 	static boolean debug = true;
-	
+
 	// GUIInfo, infos displayed on the screen
 	GUIInfos guiInfos = new GUIInfos(guiFont, assetManager, guiNode);
 
@@ -47,57 +46,49 @@ public class Main extends SimpleApplication {
 	public void simpleInitApp() {
 
 		// World generation
+		printDebug("Generating world ...");
 		World world = new World(128, 64, 128);
-		if (debug)
-			System.out.println("World generated");
+		printDebug("World generated !");
 
 		// World drawing
+		printDebug("\nDisplaying world ...");
 		WorldDrawer.drawWorld(world, assetManager, rootNode, viewPort);
-		if (debug)
-			System.out.println("World Displayed");
+		printDebug("World Displayed !");
 
-		
-		
-		
-		
-//		// we create a water processor
-//		SimpleWaterProcessor waterProcessor = new SimpleWaterProcessor(
-//				assetManager);
-//		waterProcessor.setReflectionScene(rootNode);
-//
-//		int waterX = -200;
-//		int waterY = 0;
-//		int waterZ = 250;
-//
-//		// we set the water plane
-//		Vector3f waterLocation = new Vector3f(waterX, waterY, waterZ);
-//		waterProcessor.setPlane(new Plane(Vector3f.UNIT_Y, waterLocation
-//				.dot(Vector3f.UNIT_Y)));
-//		viewPort.addProcessor(waterProcessor);
-//
-//		// we set wave properties
-//		waterProcessor.setWaterDepth(40); // transparency of water
-//		waterProcessor.setDistortionScale(0.05f); // strength of waves
-//		waterProcessor.setWaveSpeed(0.02f); // speed of waves
-//
-//		// we define the wave size by setting the size of the texture
-//		// coordinates
-//		Quad quad = new Quad(400, 400);
-//		quad.scaleTextureCoordinates(new Vector2f(6f, 6f));
-//
-//		// we create the water geometry from the quad
-//		Geometry water = new Geometry("water", quad);
-//		water.setLocalRotation(new Quaternion().fromAngleAxis(
-//				-FastMath.HALF_PI, Vector3f.UNIT_X));
-//		water.setLocalTranslation(waterX, waterY, waterZ);
-//		water.setShadowMode(ShadowMode.Receive);
-//		water.setMaterial(waterProcessor.getMaterial());
+		// // we create a water processor
+		// SimpleWaterProcessor waterProcessor = new SimpleWaterProcessor(
+		// assetManager);
+		// waterProcessor.setReflectionScene(rootNode);
+		//
+		// int waterX = -200;
+		// int waterY = 0;
+		// int waterZ = 250;
+		//
+		// // we set the water plane
+		// Vector3f waterLocation = new Vector3f(waterX, waterY, waterZ);
+		// waterProcessor.setPlane(new Plane(Vector3f.UNIT_Y, waterLocation
+		// .dot(Vector3f.UNIT_Y)));
+		// viewPort.addProcessor(waterProcessor);
+		//
+		// // we set wave properties
+		// waterProcessor.setWaterDepth(40); // transparency of water
+		// waterProcessor.setDistortionScale(0.05f); // strength of waves
+		// waterProcessor.setWaveSpeed(0.02f); // speed of waves
+		//
+		// // we define the wave size by setting the size of the texture
+		// // coordinates
+		// Quad quad = new Quad(400, 400);
+		// quad.scaleTextureCoordinates(new Vector2f(6f, 6f));
+		//
+		// // we create the water geometry from the quad
+		// Geometry water = new Geometry("water", quad);
+		// water.setLocalRotation(new Quaternion().fromAngleAxis(
+		// -FastMath.HALF_PI, Vector3f.UNIT_X));
+		// water.setLocalTranslation(waterX, waterY, waterZ);
+		// water.setShadowMode(ShadowMode.Receive);
+		// water.setMaterial(waterProcessor.getMaterial());
 		// rootNode.attachChild(water);
 	}
-
-	
-	
-	
 
 	// Used to remap flycam controls
 	private static boolean firstLoopOfSimpleUpdate = true;
@@ -112,8 +103,14 @@ public class Main extends SimpleApplication {
 		}
 		guiInfos.printflyCamLocation(cam.getLocation(), guiFont);
 		Chunks.displayCloseChunks(cam.getLocation(), rootNode);
-//		 Chunks.displayChunksInFrustum(cam.getLocation());
-		System.out.println(cam.getFrustumBottom());
+		// Chunks.displayChunksInFrustum(cam.getLocation());
+		// System.out.println(cam.getFrustumBottom());
+	}
+
+	// Display generation progress state if the debug flag is set to true
+	protected static void printDebug(String str) {
+		if (debug)
+			System.out.println(str);
 	}
 
 	// Application settings (window size, vsync ...
@@ -170,12 +167,11 @@ public class Main extends SimpleApplication {
 	private ActionListener actionListener = new ActionListener() {
 		public void onAction(String name, boolean keyPressed, float tpf) {
 			if (name.equals("Hyperspeed") && !keyPressed) {
-		guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
-				if (isHyperspeedOn == true){
+				guiFont = assetManager.loadFont("Interface/Fonts/Default.fnt");
+				if (isHyperspeedOn == true) {
 					flyCam.setMoveSpeed(flyCam.getMoveSpeed() / 10);
 					guiInfos.printHyperSpeed("Off", guiFont);
-				}
-				else{
+				} else {
 					flyCam.setMoveSpeed(flyCam.getMoveSpeed() * 10);
 					guiInfos.printHyperSpeed("On", guiFont);
 				}
@@ -183,7 +179,7 @@ public class Main extends SimpleApplication {
 			}
 		}
 	};
-	
+
 	// Flycam moving forward ad backward
 	private AnalogListener analogListener = new AnalogListener() {
 		public void onAnalog(String name, float value, float tpf) {
