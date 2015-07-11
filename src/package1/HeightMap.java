@@ -1,4 +1,4 @@
-package GlobalPackage;
+package package1;
 
 public class HeightMap {
 

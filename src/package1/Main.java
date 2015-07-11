@@ -1,4 +1,4 @@
-package GlobalPackage;
+package package1;
 
 import com.jme3.app.SimpleApplication;
 

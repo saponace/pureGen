@@ -1,4 +1,4 @@
-package GlobalPackage;
+package package1;
 
 // Text & font 
 import com.jme3.font.BitmapText;

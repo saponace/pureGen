@@ -1,3 +1,3 @@
-bin
-.classpath
-.metadata
+.idea/
+out
+puregen.iml

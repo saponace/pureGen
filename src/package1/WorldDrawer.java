@@ -1,4 +1,4 @@
-package GlobalPackage;
+package package1;
 
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -21,7 +21,7 @@ import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.RenderState.BlendMode;
 
-import GlobalPackage.World.BlockType;
+import package1.World.BlockType;
 
 public class WorldDrawer {
 

@@ -1,8 +1,8 @@
 
-package GlobalPackage;
+package package1;
 
 
-import GlobalPackage.WorldDrawer.Orientation;
+import package1.WorldDrawer.Orientation;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector2f;
 import com.jme3.scene.Mesh;
