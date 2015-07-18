@@ -1,51 +1,51 @@
-package package1;
+package generation;
 
 // Hashmaps
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Iterator;
 // Chunks are nodes
+import Main.DebugUtils;
 import com.jme3.scene.Node;
 // Rendering optimization
 import jme3tools.optimize.GeometryBatchFactory;
 // Cam location (choosing which chunks to display)
 import com.jme3.math.Vector3f;
-
+import utils.Couple;
 
 
 public class Chunks {
     /**
      * Hashmap that contains chunks
      */
-    private static HashMap<Couple, Node> chunksHashMap = new HashMap<Couple, Node>();
+    private HashMap<Couple, Node> chunksHashMap = new HashMap<Couple, Node>();
     /**
      * The size of the chunks (length on a side of the chunks)
      */
-    private static int chunkSize = 16;
+    private int chunkSize = 16;
     /**
      * Render distance (in chunks unit)
      */
-    private static int renderDistance = 30;
+    private int renderDistance = 30;
     /**
      * Does the algorithm check every chunk at every simpleUpdate loop to detach
      * them ? Useful notably useful when teleporting
      */
-    private static boolean aggressiveChunkUnloading = false;
+    private boolean aggressiveChunkUnloading = false;
     /**
      * Do we attach every chunk to the rotNode at startup ?
      */
-    private static boolean loadEveryChunkAtStartup = false;
+    private boolean loadEveryChunkAtStartup = false;
 
 
     /**
      * Create an ensemble of chunks to divide the world
-     * @param world The world which chunks has to be generated
+     * @param xmin The minimum offset of the world on th x-axis
+     * @param zmin The minimum offset of the world on th z-axis
+     * @param xmax The maximum offset of the world on th x-axis
+     * @param zmax The maximum offset of the world on th z-axis
      */
-    public Chunks(World world) {
-        int xmin = world.xMin();
-        int zmin = world.zMin();
-        int xmax = world.xMax();
-        int zmax = world.zMax();
+    public Chunks(int xmin, int zmin, int xmax, int zmax) {
         Couple maxChunks = getChunkPosOf(xmax - 1, zmax - 1);
         Couple minChunks = getChunkPosOf(xmin, zmin);
 
@@ -64,7 +64,7 @@ public class Chunks {
      * @param k The z axis of the block
      * @return A couple representing the position of the chunk in the world (in chunks units, not in block units)
      */
-    private static Couple getChunkPosOf(int i, int k) {
+    private Couple getChunkPosOf(int i, int k) {
         int iNbChunk = i / chunkSize;
         int kNbChunk = k / chunkSize;
         Couple chunkPos = new Couple(iNbChunk, kNbChunk);
@@ -92,7 +92,7 @@ public class Chunks {
      * @param chunk The Node representing the chunk
      * @param anchor The anchor to which we should attach the Node
      */
-    private static void attachChunk(Node chunk, Node anchor) {
+    private void attachChunk(Node chunk, Node anchor) {
         anchor.attachChild(chunk);
     }
     /**
@@ -100,7 +100,7 @@ public class Chunks {
      * @param chunk The Node representing the chunk
      * @param anchor The anchor from which we should detatch the Node
      */
-    private static void detachChunk(Node chunk, Node anchor) {
+    private void detachChunk(Node chunk, Node anchor) {
         anchor.detachChild(chunk);
     }
     /**
@@ -108,7 +108,7 @@ public class Chunks {
      * @param world The world from which the chunks should be attached
      * @param anchor The anchor to which the chunks should be attached
      */
-    public static void loadEveryChunk(World world, Node anchor) {
+    public void loadEveryChunk(World world, Node anchor) {
         int xmin = world.xMin();
         int zmin = world.zMin();
         int xmax = world.xMax();
@@ -125,7 +125,8 @@ public class Chunks {
                 // Rendering optimizations
                 GeometryBatchFactory.optimize(chunk);
 
-                Main.printDebug("chunk " + chunkPos.toString() + " filled");
+                DebugUtils.printDebug("chunk " + chunkPos.toString() + " " +
+                        "filled");
             }
     }
     /**
@@ -133,7 +134,7 @@ public class Chunks {
      * @param camLocation The location of the cam
      * @param anchor The Node containing the chunks to display
      */
-    public static void displayCloseChunks(Vector3f camLocation, Node anchor) {
+    public void displayCloseChunks(Vector3f camLocation, Node anchor) {
         Couple camChunkPos = getChunkPosOf((int) camLocation.x,
                 (int) camLocation.z);
         int diameterToCheckToDetach = 4;
@@ -167,7 +168,7 @@ public class Chunks {
      * @param camLocation The location of the cam
      * @param anchor The Node containing the chunks to display
      */
-    public static void displayChunksInFrustum(Vector3f camLocation, Node anchor) {
+    public void displayChunksInFrustum(Vector3f camLocation, Node anchor) {
 
     }
 }

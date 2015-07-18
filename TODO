@@ -1,0 +1,5 @@
+Use Couple from ecdd
+OctreeNode and Octree
+Block class
+revisit GUI, notably position of elements, key to toggle displaying of GUI,
+and displaying everything when option on (do not wait for update)

@@ -1,5 +1,8 @@
-package package1;
+package rendering;
 
+import Main.DebugUtils;
+import enumerations.BlockType;
+import enumerations.Orientation;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.post.FilterPostProcessor;
@@ -21,15 +24,9 @@ import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.RenderState.BlendMode;
 
-import package1.World.BlockType;
+import generation.World;
 
 public class WorldDrawer {
-    /**
-     * Enumeration containing every orientation possible
-     */
-    public static enum Orientation {
-        NORTH, WEST, SOUTH, EAST, UP, DOWN
-    };
     /**
      * Should the quads on the border of the world and below the world be
      * generated. If set to false, generation on the world extremely accelerated
@@ -45,8 +42,8 @@ public class WorldDrawer {
      * @param orientation The orientation of the vertex
      * @return An array containing the positions of the corners
      */
-    private static Vector3f[] newVertice(int x, int y, int z,
-                                         Orientation orientation) {
+    private static Vector3f[] newVertex(int x, int y, int z,
+                                        Orientation orientation) {
         Vector3f[] vertices = new Vector3f[4];
 
         switch (orientation) {
@@ -156,7 +153,7 @@ public class WorldDrawer {
 
         // Setting buffers
         mesh.setBuffer(Type.Position, 3,
-                BufferUtils.createFloatBuffer(newVertice(x, y, z, orientation)));
+                BufferUtils.createFloatBuffer(newVertex(x, y, z, orientation)));
         mesh.setBuffer(Type.Index, 1, BufferUtils.createIntBuffer(indexes));
         mesh.setBuffer(Type.Normal, 3,
                 BufferUtils.createFloatBuffer(getNormal(orientation)));
@@ -205,7 +202,7 @@ public class WorldDrawer {
             if (world.getBlock(x, y, z) == BlockType.AIR)
                 return false;
             else {
-                World.BlockType blockNextTo;
+                BlockType blockNextTo;
                 switch (orientation) {
                     case UP:
                         blockNextTo = world.getBlock(x, y + 1, z);
@@ -338,10 +335,8 @@ public class WorldDrawer {
         int ymax = world.yMax();
         int zmax = world.zMax();
         // Cunks structure containing every chunk
-        Chunks chunks = new Chunks(world);
 
-        if (Main.debug)
-            System.out.println("Blocks being rendered ...");
+        DebugUtils.printDebug("Blocks being rendered ...");
         for (int i = xmin; i < xmax; i++) {
             for (int j = ymax - 1; j >= ymin; j--)
                 for (int k = zmin; k < zmax; k++) {
@@ -349,10 +344,10 @@ public class WorldDrawer {
                         if (isQuadNeeded(world, i, j, k, orientation))
                             drawQuad(i, j, k, orientation,
                                     world.getBlock(i, j, k), assetManager,
-                                    chunks.getChunk(i, k));
+                                    world.chunks.getChunk(i, k));
                 }
         }
-        Chunks.loadEveryChunk(world, anchor);
+        world.chunks.loadEveryChunk(world, anchor);
 
         Sky sky = new Sky(anchor, assetManager);
     }

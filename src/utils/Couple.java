@@ -1,4 +1,4 @@
-package package1;
+package utils;
 
 public class Couple {
     /**
@@ -16,7 +16,7 @@ public class Couple {
      * @param i The first member of the couple to set
      * @param k The second member of the couple to set
      */
-    Couple(int i, int k) {
+    public Couple(int i, int k) {
         this.xOffset = i;
         this.zOffset = k;
     }

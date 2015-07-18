@@ -1,4 +1,4 @@
-package package1;
+package generation;
 
 public class Dynamic2DArray {
     /**

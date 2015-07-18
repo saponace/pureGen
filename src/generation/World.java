@@ -1,10 +1,11 @@
-package package1;
+package generation;
+
+import enumerations.BlockType;
 
 public class World {
-    /**
-     * Enumeration of all the block types
-     */
-    public static enum BlockType {AIR, GRASS, DIRT, STONE, WATER, OUT_OF_BOUNDS};
+
+    public Chunks chunks;
+
     /**
      * 3D array containing the blocks
      */
@@ -21,6 +22,7 @@ public class World {
         matrix = new BlockType[x][y][z];
         // heightMap -> height of the surface of the world
         HeightMap heightMap = new HeightMap(0, x, 1, y, 0, z);
+        chunks = new Chunks(0, 0, x, z);
 
         for(int i = 0; i < x; i++)
             for(int k = 0; k < z; k++){
