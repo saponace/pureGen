@@ -13,7 +13,7 @@ import com.jme3.asset.AssetManager;
 import com.jme3.scene.Node;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 
-public class Sky {
+public class SkyRenderer {
     /**
      * The asset manager of the sky
      */
@@ -34,7 +34,7 @@ public class Sky {
      * @param anchor The node to which the sky should be attached
      * @param assetManager The assetManager of the sky
      */
-    public Sky(Node anchor, AssetManager assetManager){
+    public SkyRenderer(Node anchor, AssetManager assetManager){
         this.assetManager = assetManager;
         this.anchor = anchor;
         this.skyDistance = 5000;
@@ -158,7 +158,7 @@ public class Sky {
      * @param urCol The Top-Right color
      * @param drCol The Bottom-Right color
      * @param dlCol The Bottom-Left color
-     * @return
+     * @return The geometry of the quad
      */
     private Geometry createQuad(Orientation orientation,
                                 ColorRGBA ulCol, ColorRGBA urCol,
