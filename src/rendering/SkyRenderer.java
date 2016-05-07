@@ -1,5 +1,6 @@
 package rendering;
 
+import Main.GlobalParameters;
 import enumerations.Orientation;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector2f;
@@ -37,7 +38,7 @@ public class SkyRenderer {
     public SkyRenderer(Node anchor, AssetManager assetManager){
         this.assetManager = assetManager;
         this.anchor = anchor;
-        this.skyDistance = 5000;
+        this.skyDistance = GlobalParameters.skyDistance;
         draw();
     }
 

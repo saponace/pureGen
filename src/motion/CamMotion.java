@@ -1,8 +1,7 @@
-package rendering;
+package motion;
 
 
 
-// Camera motion
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.controls.ActionListener;
@@ -12,6 +11,7 @@ import com.jme3.input.KeyInput;
 import com.jme3.math.Vector3f;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.renderer.Camera;
+import rendering.GUIInfos;
 
 public class CamMotion {
 

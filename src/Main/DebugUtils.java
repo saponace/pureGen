@@ -3,10 +3,9 @@ package Main;
 public class DebugUtils {
 
     /**
-     * If set to true, details about the generation and rendering process
-     * will be printed in the console
+     * The debug selector
      */
-    private static boolean debugMode = true;
+    private static boolean debugMode = GlobalParameters.debugMode;
 
 
     // Display generation progress state if the debug flag is set to true

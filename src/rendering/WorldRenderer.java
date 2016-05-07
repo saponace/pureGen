@@ -1,6 +1,6 @@
 package rendering;
 
-import Main.DebugUtils;
+import Main.GlobalParameters;
 import com.jme3.asset.AssetManager;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -12,18 +12,15 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue.ShadowMode;
 import com.jme3.scene.Node;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
-import enumerations.Orientation;
 import generation.World;
 
-import static rendering.BlockRenderer.isQuadNeeded;
-import static rendering.BlockRenderer.drawQuad;
 
-public class WorldDrawer {
+public abstract class WorldRenderer {
     /**
      * Should the quads on the border of the world and below the world be
      * generated. If set to false, generation on the world extremely accelerated
      */
-    static boolean minimalRendering = true;
+    static boolean minimalRendering = GlobalParameters.minimalRendering;
 
     /**
      * Set the light sources qnd the shadows
@@ -67,32 +64,35 @@ public class WorldDrawer {
      * @param anchor The Node which should host the world
      * @param viewPort The viewPort of the app
      */
-    public static void drawWorld(World world, AssetManager assetManager,
-                                 Node anchor, ViewPort viewPort) {
-
+    public static void init(World world, AssetManager assetManager,
+                            Node anchor, ViewPort viewPort) {
         setLight(assetManager, anchor, viewPort);
-
-        int xmin = world.xMin();
-        int ymin = world.yMin();
-        int zmin = world.zMin();
-        int xmax = world.xMax();
-        int ymax = world.yMax();
-        int zmax = world.zMax();
-        // Cunks structure containing every chunk
-
-        DebugUtils.printDebug("Blocks being rendered ...");
-        for (int i = xmin; i < xmax; i++) {
-            for (int j = ymax - 1; j >= ymin; j--)
-                for (int k = zmin; k < zmax; k++) {
-                    for (Orientation orientation : Orientation.values())
-                        if (isQuadNeeded(world, i, j, k, orientation))
-                            drawQuad(i, j, k, orientation,
-                                    world.getBlock(i, j, k), assetManager,
-                                    world.chunks.getChunk(i, k));
-                }
-        }
-        world.chunks.loadEveryChunk(world, anchor);
-
+//
+//        int xmin = world.xMin();
+//        int ymin = world.yMin();
+//        int zmin = world.zMin();
+//        int xmax = world.xMax();
+//        int ymax = world.yMax();
+//        int zmax = world.zMax();
+//        // Cunks structure containing every chunk
+//
+//        DebugUtils.printDebug("Blocks being rendered ...");
+//        for (int i = xmin; i < xmax; i++) {
+//            for (int j = ymax - 1; j >= ymin; j--)
+//                for (int k = zmin; k < zmax; k++) {
+//                    for (Orientation orientation : Orientation.values()) {
+//                        Position3D currPosition = new Position3D(i, j, k);
+//                        if (isQuadNeeded(world, currPosition, orientation))
+//                            drawQuad(currPosition, orientation,
+//                                    world.getBlock(currPosition).getBlockType(),
+//                                    assetManager,
+//                                    world.chunks.getChunkOfPointAt
+//                                            (currPosition).getAnchor());
+//                    }
+//                }
+//        }
+////        world.chunks.loadEveryChunk(world, anchor);
+//
         SkyRenderer skyRenderer = new SkyRenderer(anchor, assetManager);
     }
 }

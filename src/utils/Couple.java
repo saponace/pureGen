@@ -1,69 +1,92 @@
 package utils;
 
-public class Couple {
-    /**
-     * The first member of the Couple
-     */
-    private int xOffset;
-    /**
-     * The second member of the Couple
-     */
-    private int zOffset;
+public class Couple<A, B> {
+    private A first;
+    private B second;
 
 
     /**
      * Create an instance of Couple with the given members
-     * @param i The first member of the couple to set
-     * @param k The second member of the couple to set
+     * @param first The first member to set to the couple
+     * @param second The second member to set to the couple
      */
-    public Couple(int i, int k) {
-        this.xOffset = i;
-        this.zOffset = k;
+    public Couple(A first, B second) {
+        this.first = first;
+        this.second = second;
     }
 
 
     /**
-     * Get the first member of the Couple
+     * Set the first member of the couple
+     * @param first The value to assign to the first member of the couple
+     */
+    public void setFirst(A first) {
+        this.first = first;
+    }
+    /**
+     * Set the second member of the couple
+     * @param second The value to assign to the second member of the couple
+     */
+    public void setSecond(B second) {
+        this.second = second;
+    }
+
+
+    /**
+     * Get the first member of the couple
      * @return The first member of the couple
      */
-    public int i() {
-        return this.xOffset;
+    public A getFirst() {
+        return first;
     }
     /**
-     * Get the second member of the Couple
+     * Get the second member of the couple
      * @return The second member of the couple
      */
-    public int k() {
-        return this.zOffset;
+    public B getSecond() {
+        return second;
     }
 
 
     /**
-     * Usual toString() method.
-     * @return A string of shape "(x, y)" where x and y are the two member or the Couple
+     * Overriden hashCode() method, useful to use as key in HashMaps
+     * @return The hashCode of the couple
      */
     @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder(
-                "(" + this.xOffset + ", " + this.zOffset + ")");
-        return result.toString();
+    public int hashCode() {
+        int hashFirst = first != null ? first.hashCode() : 0;
+        int hashSecond = second != null ? second.hashCode() : 0;
+
+        return (hashFirst + hashSecond) * hashSecond + hashFirst;
     }
     /**
-     * Method Overrided so that we cqn use Couples qs keys for The Hashmap
-     * @param object The other object to determine if it is equal or not
-     * @return A boolean telling if the two objects are equals or not
+     * Overriden equals(Object o) method, useful to use as key in HashMaps
+     * @param other The object to test the equality with
+     * @return A boolean telling if the parameter is equal to the instance or
+     * not
      */
     @Override
-    public boolean equals(Object object){
-        Couple c = (Couple) object;
-        return ((this.xOffset == c.i()) && (this.zOffset == c.k()));
+    public boolean equals(Object other) {
+        if (other instanceof Couple) {
+            Couple otherCouple = (Couple) other;
+            return
+                    ((  this.first == otherCouple.first ||
+                            ( this.first != null && otherCouple.first != null &&
+                                    this.first.equals(otherCouple.first))) &&
+                            (	this.second == otherCouple.second ||
+                                    ( this.second != null && otherCouple.second != null &&
+                                            this.second.equals(otherCouple.second))) );
+        }
+
+        return false;
     }
     /**
-     * Idem than equals(). Method overrided to be able to use Couple as keys for Hashmaps.
-     * @return 0
+     * Overriden toString() method
+     * @return A String representing the couple
      */
     @Override
-    public int hashCode(){
-        return 0;
+    public String toString(){
+        return "(" + first + ", " + second + ")";
     }
+
 }

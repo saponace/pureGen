@@ -1,7 +1,7 @@
 package utils;
 
 public class Triplet<A, B, C> {
-    private Couple2<A, B> couple;
+    private Couple<A, B> couple;
     private C third;
 
 
@@ -12,7 +12,7 @@ public class Triplet<A, B, C> {
      * @param third The second member to set to the triplet
      */
     public Triplet(A first, B second, C third) {
-        this.couple = new Couple2(first, second);
+        this.couple = new Couple(first, second);
         this.third = third;
     }
 

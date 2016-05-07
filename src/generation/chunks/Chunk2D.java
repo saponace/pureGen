@@ -1,7 +1,7 @@
 package generation.chunks;
 
 
-import utils.CoupleOfInt;
+import utils.Position2D;
 
 import java.util.ArrayList;
 
@@ -17,47 +17,58 @@ public class Chunk2D<T>{
     /**
      * Offset of the chunk on the x axis, y axis, and z axis (unit : chunks)
      */
-    private CoupleOfInt offsetInChunks;
+    private Position2D offsetInChunks;
     /**
      * Offset of the chunk on the x axis, y axis, and z axis (unit : blocks)
      */
-    private CoupleOfInt offsetInBlocks;
+    private Position2D offsetInBlocks;
 
 
     /**
      * Create an instance of Chunk2D
      * @param size The size of the chunk
-     * @param offset The offset of the chunk in the world
+     * @param offsetInChunks The offset of the chunk in the world (in chunks,
+     *                       not blocks)
      */
-    public Chunk2D(int size, CoupleOfInt offsetInChunks){
+    public Chunk2D(int size, Position2D offsetInChunks){
         this.size = size;
         this.offsetInChunks = offsetInChunks;
-        this.offsetInBlocks = new CoupleOfInt(
-                offsetInChunks.getFirst() / this.size,
-                offsetInChunks.getSecond() / this.size);
+        this.offsetInBlocks = new Position2D(
+                offsetInChunks.getX() * this.size,
+                offsetInChunks.getY() * this.size);
 
         this.dataMatrix = new ArrayList<>(size);
-        for(ArrayList<T> subList : this.dataMatrix)
-            subList = new ArrayList<>(size);
+        for(int i=0; i < size; i++){
+            ArrayList<T> subList = new ArrayList<>(size);
+            for(int j=0; j < size; j++)
+                subList.add(null);
+            dataMatrix.add(subList);
+        }
     }
 
 
     /**
      * Set one element in the chunk
-     * @param position The position of the element to set
+     * @param position The position of the element to set (absolute position
+     *                 in the world, independent from the position of the chunk)
      * @param data The value to assign to this element
      */
-    public void set(CoupleOfInt position, T data) {
-        this.dataMatrix.get(position.getFirst() - offsetInBlocks.getFirst())
-                .set(position.getSecond() - offsetInBlocks.getSecond(), data);
+    public void set(Position2D position, T data) {
+        this.dataMatrix.get(position.getX() - offsetInBlocks.getX())
+                .set(position.getY() - offsetInBlocks.getY(), data);
     }
     /**
      * Get one element in the chunk
      * @param position The position of the element to get
      */
-    public T get(CoupleOfInt position) {
-        return dataMatrix.get(position.getFirst() - offsetInBlocks.getFirst())
-                .get(position.getSecond() - offsetInBlocks.getSecond());
+    public T get(Position2D position) {
+        T data = dataMatrix.get(position.getX() - offsetInBlocks.getX())
+                .get(position.getY() - offsetInBlocks.getY());
+        if (data != null)
+            return data;
+        else
+            throw new RuntimeException("There is no block at " + position
+                    .toString() + " but there should be a block here");
     }
 
 
@@ -66,10 +77,10 @@ public class Chunk2D<T>{
      * @param position The position of the point
      * @return A boolean telling if yes or not the point is in the chunk
      */
-    public boolean contains(CoupleOfInt position){
-        return (position.getFirst() > offsetInBlocks.getFirst()
-                && position.getFirst() < offsetInBlocks.getFirst() + this.size
-                && position.getSecond() > offsetInBlocks.getSecond()
-                && position.getSecond() < offsetInBlocks.getSecond() + this.size);
+    public boolean contains(Position2D position){
+        return (position.getX() > offsetInBlocks.getX()
+                && position.getX() < offsetInBlocks.getX() + this.size
+                && position.getY() > offsetInBlocks.getY()
+                && position.getY() < offsetInBlocks.getY() + this.size);
     }
 }
