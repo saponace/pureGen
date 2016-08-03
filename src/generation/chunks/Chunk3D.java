@@ -3,7 +3,6 @@ package generation.chunks;
 
 import enumerations.BlockType;
 import generation.Block;
-import rendering.BlockRenderer;
 import rendering.nodeManagers.Chunk3DNodeManager;
 import utils.Position2D;
 import utils.Position3D;

@@ -2,6 +2,7 @@ package rendering.nodeManagers;
 
 import com.jme3.scene.Node;
 import generation.chunks.Chunk3DCollection;
+import generation.chunks.ChunkDoesNotExistException;
 import utils.Position3D;
 
 public class WorldNodeManager {
@@ -68,9 +69,9 @@ public class WorldNodeManager {
      * Display all the adjacent chunks and hide the more distant chunks.
      * Actually load all the chunks in the sphere and unload all the chunks
      * outside of the sphere but close to it (in the cube in which the sphere
-     * is incircled). So if the player is teleported,
-     * unloading all the chunks of the sphere will be needed before the
-     * teleportation (elsewise they won't be unloaded)
+     * is incircled, plus 1 chunk in every direction). So if the player is
+     * teleported, unloading all the chunks of the sphere will be needed before
+     * the teleportation (elsewise they won't be unloaded)
      * @param position The position around which the chunks have to be loaded
      *                 (center of the sphere)
      * @param radius The Radius of the sphere in which the chunks will be
@@ -81,18 +82,22 @@ public class WorldNodeManager {
         int xCenter = position.getX() / chunkSize;
         int yCenter = position.getY() / chunkSize;
         int zCenter = position.getZ() / chunkSize;
-        for (int i = xCenter - radius; i < xCenter + radius; i++)
-            for (int j = yCenter - radius; j < yCenter + radius; j++)
-                for (int k = zCenter - radius; k < zCenter + radius; k++) {
+        for (int i = xCenter - radius; i < xCenter + 1 + radius; i++)
+            for (int j = yCenter - radius; j < yCenter + 1 + radius; j++)
+                for (int k = zCenter - radius; k < zCenter + 1 + radius; k++) {
                     Position3D currChunkPos = new Position3D(i, j, k);
-                    if((Math.pow(i - xCenter, 2)
-                            + Math.pow(j - yCenter, 2)
-                            + Math.pow(k - zCenter, 2))
-                            <= Math.pow(radius, 2))
-                        chunks.getChunk(currChunkPos).getNodeManager().attachChunk();
-                    else
-                        chunks.getChunk(currChunkPos).getNodeManager()
-                                .detachChunk();
+                    try {
+                        if((Math.pow(i - xCenter, 2)
+                                + Math.pow(j - yCenter, 2)
+                                + Math.pow(k - zCenter, 2))
+                                <= Math.pow(radius, 2))
+                            chunks.getChunk(currChunkPos).getNodeManager().attachChunk();
+                        else
+                            chunks.getChunk(currChunkPos).getNodeManager()
+                                    .detachChunk();
+                    } catch (ChunkDoesNotExistException e) {
+                        e.printStackTrace();
+                    }
                 }
     }
 }

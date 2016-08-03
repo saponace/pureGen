@@ -3,6 +3,7 @@ package generation;
 import Main.GlobalParameters;
 import enumerations.BlockType;
 import generation.chunks.Chunk3DCollection;
+import generation.chunks.ChunkDoesNotExistException;
 import rendering.ChunkRenderer;
 import rendering.nodeManagers.Chunk3DNodeManager;
 import rendering.nodeManagers.WorldNodeManager;
@@ -129,16 +130,19 @@ public class World {
                 z < zMin() || zMax() < z)
             return new Block(position, BlockType.OUT_OF_BOUNDS);
         else
-            return chunks.getChunkOfBlockAt(position).get(position);
+            try {
+                return chunks.getChunkOfBlockAt(position).get(position);
+            } catch (ChunkDoesNotExistException e) {
+                return new Block(new Position3D(0, 0, 0),
+                        BlockType.OUT_OF_BOUNDS);
+            }
     }
     /**
      * Set the block type at the given coordinates
      * @param position The position of the block to modify
      * @param blockType The type of the block to set
-     * @param shouldDisplay A boolean telling whether or not a
-     *                 block should be rendered
      */
-    public void setBlock(Position3D position, BlockType blockType){
+    public void setBlock(Position3D position, BlockType blockType) throws BlockDoesNotExistException, ChunkDoesNotExistException {
         int x = position.getX();
         int y = position.getY();
         int z = position.getZ();
@@ -147,7 +151,7 @@ public class World {
                 && zMin() <= z && z <= zMax())
             chunks.getChunkOfBlockAt(position).set(position,
                     new Block(position, blockType));
-        else throw  new RuntimeException("Trying to modify the type of a " +
+        else throw  new BlockDoesNotExistException("Trying to modify the type of a " +
                 "block that does not exist at " + position.toString());
     }
 
@@ -156,7 +160,7 @@ public class World {
      * @param position The position of the block to set
      *
      */
-    public void setBlock(Position3D position){
+    public void setBlock(Position3D position) throws BlockDoesNotExistException, ChunkDoesNotExistException {
         setBlock(position, blockTypeToSet(position));
     }
 
@@ -192,7 +196,7 @@ public class World {
      */
     public void generateChunksAround(Position3D camLocation, int radius) {
         int chunkSize = chunks.getSize();
-        int genRadius = radius + 1;
+        int genRadius = radius + 2;
         int camXChunk = camLocation.getX() / chunkSize;
         int camYChunk = camLocation.getY() / chunkSize;
         int camZChunk = camLocation.getZ() / chunkSize;
@@ -205,14 +209,7 @@ public class World {
                     Position3D currChunkPos = new Position3D(i, j, k);
                     if (!chunks.hasBeenGenerated(currChunkPos)) {
                         chunks.addChunk(currChunkPos);
-                        boolean shouldDisplay;
-                        if(i < camXChunk - radius || i > camXChunk + radius
-                                || j < camYChunk - radius || j > camYChunk + radius
-                                || k < camZChunk - radius || k > camZChunk + radius)
-                            shouldDisplay = false;
-                        else
-                            shouldDisplay = true;
-                        generateChunk(currChunkPos, shouldDisplay);
+                        generateChunk(currChunkPos);
                     }
                 }
     }
@@ -220,10 +217,8 @@ public class World {
     /**
      * Generate a chunk.
      * @param chunkPos The position of the chunk to generate
-     * @param shouldDisplay If set to true, the chunk will be generated AND
-     *                      built (prepared for displaying, but not displayed)
      */
-    private void generateChunk(Position3D chunkPos, boolean shouldDisplay){
+    private void generateChunk(Position3D chunkPos){
         int chunkSize = chunks.getSize();
         int xStart = chunkPos.getX() * chunkSize;
         int yStart = chunkPos.getY() * chunkSize;
@@ -235,9 +230,17 @@ public class World {
                     Position2D currBlockPosProjection = new Position2D(i, k);
                     updateMinAndMaxCoordinates(currBlockPos);
                     heightMap.getHeight(currBlockPosProjection);
-                    setBlock(currBlockPos);
+                    try {
+                        setBlock(currBlockPos);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-        ChunkRenderer.preDisplay(chunks.getChunk(chunkPos));
+        try {
+            ChunkRenderer.preDisplay(chunks.getChunk(chunkPos));
+        } catch (ChunkDoesNotExistException e) {
+            e.printStackTrace();
+        }
     }
 
 

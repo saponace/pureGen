@@ -280,7 +280,6 @@ public abstract class BlockRenderer {
         switch (btype) {
             case AIR:
                 // Never used
-                System.out.println("air");
                 //TODO: lever exception ici
                 break;
             case GRASS:
@@ -309,7 +308,6 @@ public abstract class BlockRenderer {
                 break;
             case OUT_OF_BOUNDS:
                 // Never used
-                System.out.println("out_of_bounds");
                 //TODO: lever exception ici
                 break;
             default:
@@ -335,7 +333,6 @@ public abstract class BlockRenderer {
                 chunk3DNodeManager.addBlockGeometry(getQuadGeometry
                         (position, orientation,
                                 block.getBlockType()));
-                System.out.println(block.getPosition().toString());
             }
         }
     }

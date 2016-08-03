@@ -67,32 +67,6 @@ public abstract class WorldRenderer {
     public static void init(World world, AssetManager assetManager,
                             Node anchor, ViewPort viewPort) {
         setLight(assetManager, anchor, viewPort);
-//
-//        int xmin = world.xMin();
-//        int ymin = world.yMin();
-//        int zmin = world.zMin();
-//        int xmax = world.xMax();
-//        int ymax = world.yMax();
-//        int zmax = world.zMax();
-//        // Cunks structure containing every chunk
-//
-//        DebugUtils.printDebug("Blocks being rendered ...");
-//        for (int i = xmin; i < xmax; i++) {
-//            for (int j = ymax - 1; j >= ymin; j--)
-//                for (int k = zmin; k < zmax; k++) {
-//                    for (Orientation orientation : Orientation.values()) {
-//                        Position3D currPosition = new Position3D(i, j, k);
-//                        if (isQuadNeeded(world, currPosition, orientation))
-//                            drawQuad(currPosition, orientation,
-//                                    world.getBlock(currPosition).getBlockType(),
-//                                    assetManager,
-//                                    world.chunks.getChunkOfPointAt
-//                                            (currPosition).getAnchor());
-//                    }
-//                }
-//        }
-////        world.chunks.loadEveryChunk(world, anchor);
-//
         SkyRenderer skyRenderer = new SkyRenderer(anchor, assetManager);
     }
 }

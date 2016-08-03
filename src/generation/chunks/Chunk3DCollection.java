@@ -48,13 +48,13 @@ public class Chunk3DCollection {
      * @param chunkPos The position of the chunk
      * @return The chunk
      */
-    public Chunk3D getChunk(Position3D chunkPos) {
+    public Chunk3D getChunk(Position3D chunkPos) throws ChunkDoesNotExistException {
         if(hasBeenGenerated(chunkPos))
             return chunksHashMap.get(chunkPos);
         else
-            throw new RuntimeException("Trying to get an chunk that has not " +
+            throw new ChunkDoesNotExistException("Trying to get an chunk that has not " +
                     "been generated yet (position: " + chunkPos.toString() +
-                    ").");
+                    ")");
     }
 
     /**
@@ -62,7 +62,7 @@ public class Chunk3DCollection {
      * @param blockPos The position of the block
      * @return The chunk
      */
-    public Chunk3D getChunkOfBlockAt(Position3D blockPos){
+    public Chunk3D getChunkOfBlockAt(Position3D blockPos) throws ChunkDoesNotExistException {
         return getChunk(chunkPositionOfBlockAt(blockPos));
     }
 
