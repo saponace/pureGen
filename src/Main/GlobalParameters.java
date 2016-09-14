@@ -6,7 +6,7 @@ public abstract class GlobalParameters {
      * and the size of the chunks does not affect the generation
      * Used in: main.Main
      */
-    public final static int chunkSize = 10;
+    public final static int chunkSize = 1;
     /**
      * If set to true, details about the generation and rendering process
      * will be printed in the console.

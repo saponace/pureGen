@@ -114,7 +114,6 @@ public class World {
             return BlockType.DIRT;
         else
             return BlockType.AIR;
-
     }
     /**
      * Get the block at the given coordinates

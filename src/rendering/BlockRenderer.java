@@ -22,6 +22,8 @@ public abstract class BlockRenderer {
 
     private static AssetManager assetManager;
     private static World world;
+    private static int oob = 0;
+    private static int all = 0;
 
 
     /**
@@ -235,36 +237,35 @@ public abstract class BlockRenderer {
     private static boolean isQuadNeeded(Position3D position,
                                         Orientation orientation) {
         //TODO: probleme ici: cette méthode est appelée pendant la génération du terrain, voir TODO du chunk3D
-//        System.out.println("min : " + world.xMin() + " " + world.yMin() + " " + world.zMin() + " " );
-//        System.out.println("max : " + world.xMax() + " " + world.yMax() + " " + world.zMax() + " " );
-        int x = position.getX();
-        int y = position.getY();
-        int z = position.getZ();
-        if(y <= 25)
-            return false; //TODO : c'est juste pour des tests ça, parce que tous les blocks non air ni out_of_bounds sont affichés. A enlever
-        if (WorldRenderer.minimalRendering
-                && (y == world.yMin() || x == world.xMin()
-                || x == world.xMax() - 1 || z == world.zMin() || z == world
-                .zMax() - 1))
+        BlockType currentBlockType = world.getBlock(position).getBlockType();
+        if (currentBlockType == BlockType.AIR ||
+             currentBlockType == BlockType.OUT_OF_BOUNDS)
             return false;
         else {
-            if (world.getBlock(position).getBlockType() == BlockType.AIR)
+            Position3D positionOfAdjacent = getPosOfAdjacentBlock(position, orientation);
+            BlockType adjacentBType = world.getBlock(positionOfAdjacent)
+                    .getBlockType();
+            System.out.println(adjacentBType);
+            if (currentBlockType == BlockType.WATER
+                    && adjacentBType == BlockType.WATER)
                 return false;
-            else {
-                Position3D positionOfAdjacent = getPosOfAdjacentBlock(position, orientation);
-                BlockType adjacentBType = world.getBlock(positionOfAdjacent)
-                        .getBlockType();
-//                if(adjacentBType == BlockType.OUT_OF_BOUNDS)
-//                    return false;
-                if (world.getBlock(position).getBlockType() == BlockType.WATER
-                        && adjacentBType == BlockType.WATER)
-                    return false;
+            else{
+                if (adjacentBType == BlockType.OUT_OF_BOUNDS
+                        || adjacentBType == BlockType.AIR
+                        || adjacentBType == BlockType.WATER){
+//                    System.out.println(currentBlockType + " " + adjacentBType);
+                    if(adjacentBType == BlockType.OUT_OF_BOUNDS)
+                        oob++;
+                    all++;
+//                    System.out.println("oob: " + oob);
+//                    System.out.println("all: " + all);
+                    return true;
+                }
                 else
-                    return (adjacentBType == BlockType.OUT_OF_BOUNDS
-                            || adjacentBType == BlockType.AIR
-                            || adjacentBType == BlockType.WATER);
+                    return false;
             }
         }
+        //TODO: Continnuer ici
     }
 
     /**
