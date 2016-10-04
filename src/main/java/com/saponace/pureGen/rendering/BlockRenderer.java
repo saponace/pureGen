@@ -22,8 +22,6 @@ public abstract class BlockRenderer {
 
     private static AssetManager assetManager;
     private static World world;
-    private static int oob = 0;
-    private static int all = 0;
 
 
     /**
@@ -245,7 +243,6 @@ public abstract class BlockRenderer {
             Position3D positionOfAdjacent = getPosOfAdjacentBlock(position, orientation);
             BlockType adjacentBType = world.getBlock(positionOfAdjacent)
                     .getBlockType();
-            System.out.println(adjacentBType);
             if (currentBlockType == BlockType.WATER
                     && adjacentBType == BlockType.WATER)
                 return false;
@@ -253,12 +250,6 @@ public abstract class BlockRenderer {
                 if (adjacentBType == BlockType.OUT_OF_BOUNDS
                         || adjacentBType == BlockType.AIR
                         || adjacentBType == BlockType.WATER){
-//                    System.out.println(currentBlockType + " " + adjacentBType);
-                    if(adjacentBType == BlockType.OUT_OF_BOUNDS)
-                        oob++;
-                    all++;
-//                    System.out.println("oob: " + oob);
-//                    System.out.println("all: " + all);
                     return true;
                 }
                 else
