@@ -247,8 +247,7 @@ public abstract class BlockRenderer {
                     && adjacentBType == BlockType.WATER)
                 return false;
             else{
-                if (adjacentBType == BlockType.OUT_OF_BOUNDS
-                        || adjacentBType == BlockType.AIR
+                if (adjacentBType == BlockType.AIR
                         || adjacentBType == BlockType.WATER){
                     return true;
                 }

@@ -14,16 +14,6 @@ import com.saponace.pureGen.utils.Position3D;
 public class World {
 
     /**
-     * The minimum coordinates of the world (we assume that the world can not
-     * have holes)
-     */
-    private Position3D minCoordinates = new Position3D(0, 0, 0);
-    /**
-     * The maximum coordinates of the world (we assume that the world can not
-     * have holes)
-     */
-    private Position3D maxCoordinates = new Position3D(0, 0, 0);
-    /**
      * Collection of chunks of the world
      */
     private Chunk3DCollection chunks;
@@ -39,9 +29,10 @@ public class World {
 
     /**
      * Create a world
+     *
      * @param chunkSize The size of the chunks
      */
-    public World(int chunkSize){
+    public World(int chunkSize) {
         chunks = new Chunk3DCollection(chunkSize);
         worldNodeManager = new WorldNodeManager("world base node", chunkSize,
                 chunks);
@@ -53,111 +44,66 @@ public class World {
 
 
     /**
-     * Get the maximum distance from the origin where blocks have been
-     * generated on the X axis (negative side)
-     * @return The distance
-     */
-    public int xMin(){return this.minCoordinates.getX();}
-    /**
-     * Get the maximum distance from the origin where blocks have been
-     * generated on the Y axis (negative side)
-     * @return The distance
-     */
-    public int yMin(){return this.minCoordinates.getY();}
-    /**
-     * Get the maximum distance from the origin where blocks have been
-     * generated on the Z axis (negative side)
-     * @return The distance
-     */
-    public int zMin(){return this.minCoordinates.getZ();}
-    /**
-     * Get the maximum distance from the origin where blocks have been
-     * generated on the X axis (positive side)
-     * @return The distance
-     */
-    public int xMax(){return this.maxCoordinates.getX();}
-    /**
-     * Get the maximum distance from the origin where blocks have been
-     * generated on the Y axis (positive side)
-     * @return The distance
-     */
-    public int yMax(){return this.maxCoordinates.getY();}
-    /**
-     * Get the maximum distance from the origin where blocks have been
-     * generated on the Z axis (positive side)
-     * @return The distance
-     */
-    public int zMax(){return this.maxCoordinates.getZ();}
-
-    /**
      * Get the chunks collection of the world
+     *
      * @return The chunks collection
      */
-    public Chunk3DCollection getChunks(){
+    public Chunk3DCollection getChunks() {
         return chunks;
     }
 
     /**
      * Give the type the block at the given position should be
+     *
      * @param position The position of the block
      * @return The type of the block
      */
-    private BlockType blockTypeToSet(Position3D position){
+    private BlockType blockTypeToSet(Position3D position) {
         Position2D horizontalProjection = new Position2D(
                 position.getX(), position.getZ());
         int j = position.getY();
 
         double height = heightMap.getHeight(horizontalProjection);
-        if(j == height - 1)
+        System.out.println(j + " " + " " + height);
+        if (j == height - 1)
             return BlockType.GRASS;
-        else if(j < height -1)
+        else if (j < height - 1)
             return BlockType.DIRT;
         else
             return BlockType.AIR;
     }
+
     /**
      * Get the block at the given coordinates
+     *
      * @param position The position of the block to get
-     * @return The type of the block
+     * @return The type of the block. If the block does no exist yet (chunk
+     * not generated) return a block of type OUT_OF_BOUNDS at position (0, 0, 0)
      */
-    public Block getBlock(Position3D position){
-        int x = position.getX();
-        int y = position.getY();
-        int z = position.getZ();
-        if(x < xMin() || xMax() < x ||
-                y < yMin() || yMax() < y ||
-                z < zMin() || zMax() < z)
-            return new Block(position, BlockType.OUT_OF_BOUNDS);
-        else
-            try {
-                return chunks.getChunkOfBlockAt(position).get(position);
-            } catch (ChunkDoesNotExistException e) {
-                return new Block(new Position3D(0, 0, 0),
-                        BlockType.OUT_OF_BOUNDS);
-            }
+    public Block getBlock(Position3D position) {
+        try {
+            return chunks.getChunkOfBlockAt(position).get(position);
+        } catch (ChunkDoesNotExistException e) {
+            return new Block(new Position3D(0, 0, 0),
+                    BlockType.OUT_OF_BOUNDS);
+        }
     }
+
     /**
      * Set the block type at the given coordinates
-     * @param position The position of the block to modify
+     *
+     * @param position  The position of the block to modify
      * @param blockType The type of the block to set
      */
     public void setBlock(Position3D position, BlockType blockType) throws BlockDoesNotExistException, ChunkDoesNotExistException {
-        int x = position.getX();
-        int y = position.getY();
-        int z = position.getZ();
-        if(xMin() <= x && x <= xMax()
-                && yMin() <= y && y <= yMax()
-                && zMin() <= z && z <= zMax())
-            chunks.getChunkOfBlockAt(position).set(position,
-                    new Block(position, blockType));
-        else throw  new BlockDoesNotExistException("Trying to modify the type of a " +
-                "block that does not exist at " + position.toString());
+        chunks.getChunkOfBlockAt(position).set(position,
+                new Block(position, blockType));
     }
 
     /**
      * Set the block at the given coordinates according to the heightMap
-     * @param position The position of the block to set
      *
+     * @param position The position of the block to set
      */
     public void setBlock(Position3D position) throws BlockDoesNotExistException, ChunkDoesNotExistException {
         setBlock(position, blockTypeToSet(position));
@@ -166,19 +112,11 @@ public class World {
 
     /**
      * Get the node manager of the world
+     *
      * @return The node manager
      */
-    public WorldNodeManager getNodeManager(){
+    public WorldNodeManager getNodeManager() {
         return worldNodeManager;
-    }
-
-    private void updateMinAndMaxCoordinates(Position3D position){
-        minCoordinates.setX(Math.min(xMin(), position.getX()));
-        minCoordinates.setY(Math.min(yMin(), position.getY()));
-        minCoordinates.setZ(Math.min(zMin(), position.getZ()));
-        maxCoordinates.setX(Math.max(xMin(), position.getX()));
-        maxCoordinates.setY(Math.max(yMin(), position.getY()));
-        maxCoordinates.setZ(Math.max(zMin(), position.getZ()));
     }
 
 
@@ -190,8 +128,9 @@ public class World {
      * . We do that because to prepare a chunk to displaying, he surrounding
      * chunks need to have already been generated (because of BlockRenderer
      * .isQuadNeeded)
+     *
      * @param camLocation The center of the cube
-     * @param radius Half the size of the cube
+     * @param radius      Half the size of the cube
      */
     public void generateChunksAround(Position3D camLocation, int radius) {
         int chunkSize = chunks.getSize();
@@ -215,9 +154,10 @@ public class World {
 
     /**
      * Generate a chunk.
+     *
      * @param chunkPos The position of the chunk to generate
      */
-    private void generateChunk(Position3D chunkPos){
+    private void generateChunk(Position3D chunkPos) {
         int chunkSize = chunks.getSize();
         int xStart = chunkPos.getX() * chunkSize;
         int yStart = chunkPos.getY() * chunkSize;
@@ -225,9 +165,8 @@ public class World {
         for (int i = xStart; i < xStart + chunkSize; i++)
             for (int j = yStart; j < yStart + chunkSize; j++)
                 for (int k = zStart; k < zStart + chunkSize; k++) {
-                    Position3D currBlockPos = new Position3D( i, j, k);
+                    Position3D currBlockPos = new Position3D(i, j, k);
                     Position2D currBlockPosProjection = new Position2D(i, k);
-                    updateMinAndMaxCoordinates(currBlockPos);
                     heightMap.getHeight(currBlockPosProjection);
                     try {
                         setBlock(currBlockPos);
@@ -240,49 +179,5 @@ public class World {
         } catch (ChunkDoesNotExistException e) {
             e.printStackTrace();
         }
-    }
-
-
-
-
-    /**
-     * The toString overridden method
-     * @return A string representing the world
-     */
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder();
-        for(int i = 0; i < this.xMax(); i++){
-            for(int j = this.yMax()-1 ; j >= 0; j--){
-                for(int k = 0; k < this.zMax(); k++){
-                    char charToPrint;
-                    BlockType btype = this.getBlock(
-                            new Position3D(i, j, k)).getBlockType();
-                    switch(btype){
-                        case AIR:
-                            charToPrint = 'A';
-                            break;
-                        case GRASS:
-                            charToPrint = 'G';
-                            break;
-                        case DIRT:
-                            charToPrint = 'D';
-                            break;
-                        case STONE:
-                            charToPrint = 'S';
-                            break;
-                        case WATER:
-                            charToPrint = 'W';
-                            break;
-                        default:
-                            charToPrint = 'X';
-                    }
-                    result.append(charToPrint + " ");
-                }
-                result.append("\n");
-            }
-            result.append("\n");
-        }
-        return result.toString();
     }
 }
