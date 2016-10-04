@@ -16,11 +16,6 @@ import com.saponace.pureGen.generation.World;
 
 
 public abstract class WorldRenderer {
-    /**
-     * Should the quads on the border of the world and below the world be
-     * generated. If set to false, generation on the world extremely accelerated
-     */
-    static boolean minimalRendering = GlobalParameters.minimalRendering;
 
     /**
      * Set the light sources qnd the shadows

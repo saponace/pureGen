@@ -6,7 +6,7 @@ public abstract class GlobalParameters {
      * and the size of the chunks does not affect the generation
      * Used in: main.Main
      */
-    public final static int chunkSize = 1;
+    public final static int chunkSize = 16;
     /**
      * If set to true, details about the generation and rendering process
      * will be printed in the console.
@@ -35,18 +35,6 @@ public abstract class GlobalParameters {
      * Used in: rendering.SkyRenderer
      */
     public final static int skyDistance = 500;
-    /**
-     * Should the quads on the border of the world and below the world be
-     * generated. If set to false, generation on the world extremely accelerated
-     * Used in: rendering.WorldRenderer
-     */
-    public final static boolean minimalRendering = true;
-    /**
-     * Does going near a chunk that has not been generated yet does generate
-     * it ?
-     * Used in: rendering.nodeManagers.WorldNodeManager
-     */
-    public final static boolean movingGenerateChunks = true;
     /**
      * The radius of the circle around the cam where the chunks should be
      * displayed (and created if they have not been created yet)
