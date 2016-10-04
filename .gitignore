@@ -1,3 +1,5 @@
 .idea/
-out
+target
 puregen.iml
+liblwjgl64.so
+libopenal64.so
