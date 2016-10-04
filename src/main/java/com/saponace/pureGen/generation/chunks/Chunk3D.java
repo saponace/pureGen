@@ -61,7 +61,7 @@ public class Chunk3D{
                             k + offsetInBlocks.getZ());
                     Block blockToSet = new Block(
                             positionInWorld,
-                            BlockType.OUT_OF_BOUNDS);
+                            BlockType.NONE);
                     set(positionInWorld, blockToSet);
                 }
     }

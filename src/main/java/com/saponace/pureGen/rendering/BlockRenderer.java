@@ -237,7 +237,7 @@ public abstract class BlockRenderer {
         //TODO: probleme ici: cette méthode est appelée pendant la génération du terrain, voir TODO du chunk3D
         BlockType currentBlockType = world.getBlock(position).getBlockType();
         if (currentBlockType == BlockType.AIR ||
-             currentBlockType == BlockType.OUT_OF_BOUNDS)
+             currentBlockType == BlockType.NONE)
             return false;
         else {
             Position3D positionOfAdjacent = getPosOfAdjacentBlock(position, orientation);
@@ -297,7 +297,7 @@ public abstract class BlockRenderer {
                 b = 0.910;
                 a = 0.5;
                 break;
-            case OUT_OF_BOUNDS:
+            case NONE:
                 // Never used
                 //TODO: lever exception ici
                 break;

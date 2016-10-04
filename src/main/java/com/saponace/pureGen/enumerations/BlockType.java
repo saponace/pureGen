@@ -9,5 +9,5 @@ public enum BlockType {
     DIRT,
     STONE,
     WATER,
-    OUT_OF_BOUNDS
+    NONE  // Block not generated (yet)
 }

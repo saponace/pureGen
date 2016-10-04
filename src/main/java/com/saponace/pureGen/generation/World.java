@@ -78,14 +78,14 @@ public class World {
      *
      * @param position The position of the block to get
      * @return The type of the block. If the block does no exist yet (chunk
-     * not generated) return a block of type OUT_OF_BOUNDS at position (0, 0, 0)
+     * not generated) return a block of type NONE at position (0, 0, 0)
      */
     public Block getBlock(Position3D position) {
         try {
             return chunks.getChunkOfBlockAt(position).get(position);
         } catch (ChunkDoesNotExistException e) {
             return new Block(new Position3D(0, 0, 0),
-                    BlockType.OUT_OF_BOUNDS);
+                    BlockType.NONE);
         }
     }
 
