@@ -30,8 +30,6 @@ public class Block {
     public Block(Position3D position, BlockType blockType) {
         this.position = position;
         this.blockType = blockType;
-//        if(blockType != BlockType.AIR)
-//            System.out.println(i++);
     }
 
     /**

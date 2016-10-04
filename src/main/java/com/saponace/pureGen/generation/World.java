@@ -64,7 +64,6 @@ public class World {
         int j = position.getY();
 
         double height = heightMap.getHeight(horizontalProjection);
-        System.out.println(j + " " + " " + height);
         if (j == height - 1)
             return BlockType.GRASS;
         else if (j < height - 1)
