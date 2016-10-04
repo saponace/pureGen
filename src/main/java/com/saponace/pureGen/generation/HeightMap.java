@@ -14,7 +14,7 @@ public class HeightMap {
     /**
      * The 2D array containing the heights
      */
-    private HashMap<Position2D, Double> heightMap = new HashMap<>();
+    private HashMap<Position2D, Integer> heightMap = new HashMap<>();
     /**
      * The 2D array containing the gradients
      */
@@ -77,7 +77,7 @@ public class HeightMap {
      * @param position The position of the height to compute
      * @return The wanted height
      */
-    private double computeHeight(Position2D position) {
+    private int computeHeight(Position2D position) {
         int i = position.getX();
         int k = position.getY();
         int baseXGradPos = i / gradientsInterval; // X offset of one of the four surrounding gradients
@@ -94,9 +94,9 @@ public class HeightMap {
                 height += (gradientsInterval - dist) *
                         gradientsMap.get(currGradPos);
             }
-        height = 30;
+        height = 30 + Math.random()*2;
         //TODO: Faire une vraie surface qui marche
-        return height;
+        return (int)height;
     }
     /**
      * Generate a random gradient and insert it in the table
