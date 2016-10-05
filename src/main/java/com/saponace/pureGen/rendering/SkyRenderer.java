@@ -1,6 +1,5 @@
 package com.saponace.pureGen.rendering;
 
-import com.saponace.pureGen.Main.GlobalParameters;
 import com.saponace.pureGen.enumerations.Orientation;
 import com.jme3.math.Vector3f;
 import com.jme3.math.Vector2f;
@@ -34,12 +33,13 @@ public class SkyRenderer {
      * Create an instance of sky and add it to the anchor Node
      * @param anchor The node to which the sky should be attached
      * @param assetManager The assetManager of the sky
+     * @param skyDistance The distance of the sky quads from the origin of the
+     * world (may be changed soon)
      */
-    public SkyRenderer(Node anchor, AssetManager assetManager){
+    public SkyRenderer(Node anchor, AssetManager assetManager, int skyDistance){
         this.assetManager = assetManager;
         this.anchor = anchor;
-        this.skyDistance = GlobalParameters.skyDistance;
-        draw();
+        this.skyDistance = skyDistance;
     }
 
 
@@ -251,7 +251,7 @@ public class SkyRenderer {
     /**
      * Draw the six quads representing the sky surrounding the player
      */
-    private void draw(){
+    public void draw(){
         Node sky = new Node("sky");
 
         sky.attachChild(createTopQuad(ColorRGBA.Cyan));

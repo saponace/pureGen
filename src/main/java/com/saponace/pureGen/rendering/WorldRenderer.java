@@ -1,6 +1,5 @@
 package com.saponace.pureGen.rendering;
 
-import com.saponace.pureGen.Main.GlobalParameters;
 import com.jme3.asset.AssetManager;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -60,8 +59,11 @@ public abstract class WorldRenderer {
      * @param viewPort The viewPort of the app
      */
     public static void init(World world, AssetManager assetManager,
-                            Node anchor, ViewPort viewPort) {
+                            Node anchor, ViewPort viewPort,
+                            RenderingProperties renderingProperties) {
         setLight(assetManager, anchor, viewPort);
-        SkyRenderer skyRenderer = new SkyRenderer(anchor, assetManager);
+        SkyRenderer skyRenderer = new SkyRenderer(anchor, assetManager,
+                renderingProperties.skyDistance);
+        skyRenderer.draw();
     }
 }

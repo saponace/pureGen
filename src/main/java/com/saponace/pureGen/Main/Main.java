@@ -7,19 +7,18 @@ import com.saponace.pureGen.generation.World;
 import com.saponace.pureGen.motion.CamMotion;
 import com.saponace.pureGen.rendering.BlockRenderer;
 import com.saponace.pureGen.rendering.GUIInfos;
+import com.saponace.pureGen.rendering.RenderingProperties;
 import com.saponace.pureGen.rendering.WorldRenderer;
 import com.saponace.pureGen.rendering.nodeManagers.WorldNodeManager;
 import com.saponace.pureGen.utils.Position3D;
 
-// Window settings
-// Hyperspeed
-// Camera motion
+import java.io.FileNotFoundException;
 
 
 public class Main extends SimpleApplication {
 
 
-    /**
+	/**
      * Informations displayed on the screen (cam position, etc.)
      */
 	GUIInfos guiInfos;
@@ -31,16 +30,34 @@ public class Main extends SimpleApplication {
      * A flag that allows to execute code in the simpleUpdate loop only once
      */
     private static boolean firstLoopOfSimpleUpdate = true;
+	/**
+	 * General properties
+	 */
+	private static GeneralProperties generalProperties;
+	/**
+	 * Rendering properties
+	 */
+	private static RenderingProperties renderingProperties;
 
 
 	public static void main(String[] args) {
 		Main app = new Main();
 
-        app.setShowSettings(false);
-		AppSettings settings = setAppSettings();
-		app.start();
-		app.setSettings(settings);
 
+		try {
+			generalProperties = new GeneralProperties(
+					new PropertiesFileParser().parse("general.properties"));
+			renderingProperties = new RenderingProperties(
+					new PropertiesFileParser().parse("rendering.properties"));
+
+			app.setShowSettings(false);
+			AppSettings settings = setAppSettings();
+			app.start();
+			app.setSettings(settings);
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -49,8 +66,8 @@ public class Main extends SimpleApplication {
         guiInfos = new GUIInfos(assetManager, guiNode);
 
         WorldNodeManager.setParentNode(rootNode);
-        world = new World(GlobalParameters.chunkSize);
-		WorldRenderer.init(world, assetManager, rootNode, viewPort);
+        world = new World();
+		WorldRenderer.init(world, assetManager, rootNode, viewPort, renderingProperties);
         BlockRenderer.setAssetManager(assetManager);
         BlockRenderer.setWorld(world);
 	}
@@ -69,10 +86,9 @@ public class Main extends SimpleApplication {
                 (int) floatCamLocation.y,
                 (int) floatCamLocation.z);
 		guiInfos.printflyCamLocation(floatCamLocation);
-        world.generateChunksAround(intCamLocation, GlobalParameters
-                .nearChunkDisplayingRadius);
+        world.generateChunksAround(intCamLocation);
         world.getNodeManager().attachChunksAround(intCamLocation,
-                GlobalParameters.nearChunkDisplayingRadius);
+				renderingProperties.nearChunksDisplayRadius);
 	}
 
 

@@ -5,7 +5,7 @@ public class DebugUtils {
     /**
      * The debug selector
      */
-    private static boolean debugMode = GlobalParameters.debugMode;
+    private static boolean debugMode = false;
 
 
     // Display generation progress state if the debug flag is set to true

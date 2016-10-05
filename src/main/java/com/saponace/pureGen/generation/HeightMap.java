@@ -22,17 +22,17 @@ public class HeightMap {
     /**
      * A couple containing the minimum and maximum heights allowed
      */
-    private Couple<Double, Double> minMaxHeights;
+    private Couple<Integer, Integer> minMaxHeights;
 
 
     /**
      * Create an instance of heightMap
      * @param gradientsInterval The distance between two successive
      *                          gradients (on the x and z axis)
-     * @param minMaxHeights A couple of doubles containing the minimum and
+     * @param minMaxHeights A couple of integers containing the minimum and
      *                      maximum allowed heights
      */
-    public HeightMap(int gradientsInterval, Couple<Double, Double> minMaxHeights){
+    public HeightMap(int gradientsInterval, Couple<Integer, Integer> minMaxHeights){
         this.gradientsInterval = gradientsInterval;
         this.minMaxHeights = minMaxHeights;
     }

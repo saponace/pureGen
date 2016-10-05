@@ -77,8 +77,7 @@ public class WorldNodeManager {
      * @param radius The Radius of the sphere in which the chunks will be
      *               displayed
      */
-    public void attachChunksAround(Position3D position, int
-            radius){
+    public void attachChunksAround(Position3D position, int radius){
         int xCenter = position.getX() / chunkSize;
         int yCenter = position.getY() / chunkSize;
         int zCenter = position.getZ() / chunkSize;

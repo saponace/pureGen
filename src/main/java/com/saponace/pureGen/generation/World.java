@@ -1,6 +1,6 @@
 package com.saponace.pureGen.generation;
 
-import com.saponace.pureGen.Main.GlobalParameters;
+import com.saponace.pureGen.Main.PropertiesFileParser;
 import com.saponace.pureGen.enumerations.BlockType;
 import com.saponace.pureGen.generation.chunks.Chunk3DCollection;
 import com.saponace.pureGen.generation.chunks.ChunkDoesNotExistException;
@@ -10,6 +10,8 @@ import com.saponace.pureGen.rendering.nodeManagers.WorldNodeManager;
 import com.saponace.pureGen.utils.Couple;
 import com.saponace.pureGen.utils.Position2D;
 import com.saponace.pureGen.utils.Position3D;
+
+import java.io.FileNotFoundException;
 
 public class World {
 
@@ -26,20 +28,32 @@ public class World {
      */
     WorldNodeManager worldNodeManager;
 
+    /**
+     * Rendering properties object
+     */
+    private GenerationProperties generationProperties;
+
 
     /**
      * Create a world
-     *
-     * @param chunkSize The size of the chunks
      */
-    public World(int chunkSize) {
-        chunks = new Chunk3DCollection(chunkSize);
-        worldNodeManager = new WorldNodeManager("world base node", chunkSize,
-                chunks);
-        Chunk3DNodeManager.setParentNode(worldNodeManager.getNode());
-        heightMap = new HeightMap(GlobalParameters.heightGradientsInterval,
-                new Couple<>(GlobalParameters.minHeight,
-                        GlobalParameters.maxHeight));
+    public World() {
+        try {
+            generationProperties = new GenerationProperties(
+                    new PropertiesFileParser().parse("generation.properties"));
+
+            int chunkSize = generationProperties.chunkSize;
+
+            chunks = new Chunk3DCollection(chunkSize);
+            worldNodeManager = new WorldNodeManager("world base node", chunkSize,
+                    chunks);
+            Chunk3DNodeManager.setParentNode(worldNodeManager.getNode());
+            heightMap = new HeightMap(generationProperties.heightGradientsInterval,
+                    new Couple<>(generationProperties.minHeight,
+                            generationProperties.maxHeight));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -129,11 +143,10 @@ public class World {
      * .isQuadNeeded)
      *
      * @param camLocation The center of the cube
-     * @param radius      Half the size of the cube
      */
-    public void generateChunksAround(Position3D camLocation, int radius) {
+    public void generateChunksAround(Position3D camLocation) {
         int chunkSize = chunks.getSize();
-        int genRadius = radius + 2;
+        int genRadius = generationProperties.nearChunksGenerationRadius + 2;
         int camXChunk = camLocation.getX() / chunkSize;
         int camYChunk = camLocation.getY() / chunkSize;
         int camZChunk = camLocation.getZ() / chunkSize;
