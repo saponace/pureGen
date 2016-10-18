@@ -12,7 +12,7 @@ public class GenerationProperties {
         chunkSize = Integer.parseInt(
                 props.getProperty("chunkSize", "16"));
         nearChunksGenerationRadius = Integer.parseInt(
-                props.getProperty("nearChunkDisplayRadius", "3"));
+                props.getProperty("nearChunksGenerationRadius", "3"));
         heightGradientsInterval = Integer.parseInt(
                 props.getProperty("heightGradientsInterval", "20"));
     }

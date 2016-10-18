@@ -146,7 +146,7 @@ public class World {
      */
     public void generateChunksAround(Position3D camLocation) {
         int chunkSize = chunks.getSize();
-        int genRadius = generationProperties.nearChunksGenerationRadius + 2;
+        int genRadius = generationProperties.nearChunksGenerationRadius;
         int camXChunk = camLocation.getX() / chunkSize;
         int camYChunk = camLocation.getY() / chunkSize;
         int camZChunk = camLocation.getZ() / chunkSize;
